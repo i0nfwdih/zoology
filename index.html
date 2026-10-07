@@ -985,9 +985,7 @@ The hunters who conquered the signals.
 
 <div class="leaderboard-card">
 
-<div
-id="leaderboardList"
->
+<div id="leaderboardList">
 <div class="loading">
 Loading leaderboard...
 </div>
@@ -1244,7 +1242,7 @@ const SUPABASE_URL =
 
 
 const SUPABASE_KEY =
-"sb_publishable_UBbCJWtTXQBfz2-BHOum5w_IyaclsWd";
+"sb_publishable_UBbCJWtTXQBfz2-BHOUM5w_IyaclsWd";
 
 
 const supabase =
@@ -1340,6 +1338,37 @@ return copy;
 
 
 /* =====================================================
+RESET GAME CONTROLS
+===================================================== */
+
+function resetGameControls() {
+
+const answerInput =
+document.getElementById("answerInput");
+
+const submitButton =
+document.getElementById("submitAnswer");
+
+const playButton =
+document.getElementById("playSoundButton");
+
+answerInput.disabled = false;
+
+submitButton.disabled = false;
+
+playButton.disabled = false;
+
+answerInput.value = "";
+
+document.getElementById("feedback").textContent = "";
+
+document.getElementById("feedback").className =
+"feedback";
+
+}
+
+
+/* =====================================================
 PLAYER ENTRY
 ===================================================== */
 
@@ -1428,6 +1457,10 @@ currentSignals = [];
 
 currentIndex = 0;
 
+currentSignal = null;
+
+health = 3;
+
 gameSaved = false;
 
 
@@ -1491,12 +1524,16 @@ try {
 currentDifficulty =
 difficulty;
 
+currentIndex = 0;
+
+currentSignal = null;
+
+resetGameControls();
+
 
 const signals =
 await loadSignals(difficulty);
 
-
-if(signals.length === 0) {
 
 showScreen("gameScreen");
 
@@ -1506,6 +1543,18 @@ document.getElementById(
 ).textContent =
 difficulty.toUpperCase();
 
+
+const points =
+getPointsForDifficulty(difficulty);
+
+
+document.getElementById(
+"pointsLabel"
+).textContent =
+`THIS TIER: +${points} POINT${points === 1 ? "" : "S"} PER CORRECT ANSWER`;
+
+
+if(signals.length === 0) {
 
 document.getElementById(
 "signalNumber"
@@ -1528,6 +1577,11 @@ document.getElementById(
 "submitAnswer"
 ).disabled = true;
 
+
+document.getElementById(
+"answerInput"
+).disabled = true;
+
 return;
 
 }
@@ -1536,11 +1590,6 @@ return;
 currentSignals =
 shuffle(signals);
 
-
-currentIndex = 0;
-
-
-showScreen("gameScreen");
 
 loadCurrentSignal();
 
@@ -1564,6 +1613,11 @@ CURRENT SIGNAL
 ===================================================== */
 
 function loadCurrentSignal() {
+
+if(!currentSignals.length) {
+    return;
+}
+
 
 currentSignal =
 currentSignals[currentIndex];
@@ -1629,8 +1683,12 @@ updateHealth();
 updateProgress();
 
 
+/* IMPORTANT:
+   Every new signal unlocks every control.
+*/
+
 document.getElementById(
-"playSoundButton"
+"answerInput"
 ).disabled = false;
 
 
@@ -1639,11 +1697,19 @@ document.getElementById(
 ).disabled = false;
 
 
+document.getElementById(
+"playSoundButton"
+).disabled = false;
+
+
 setTimeout(() => {
 
-document
-.getElementById("answerInput")
-.focus();
+const input =
+document.getElementById("answerInput");
+
+if(!input.disabled) {
+    input.focus();
+}
 
 },100);
 
@@ -1704,6 +1770,18 @@ PROGRESS
 
 function updateProgress() {
 
+if(!currentSignals.length) {
+
+document.getElementById(
+"progressFill"
+).style.width =
+"0%";
+
+return;
+
+}
+
+
 const percentage =
 (
 (currentIndex) /
@@ -1736,11 +1814,24 @@ async function playCurrentSound() {
 if(!currentSignal) return;
 
 
+if(
+document.getElementById(
+"playSoundButton"
+).disabled
+) {
+    return;
+}
+
+
 const audio =
 document.getElementById(
 "audioPlayer"
 );
 
+
+audio.pause();
+
+audio.currentTime = 0;
 
 audio.src =
 currentSignal.audio_url;
@@ -1801,7 +1892,11 @@ document
 event => {
 
 if(event.key === "Enter") {
-    submitAnswer();
+
+event.preventDefault();
+
+submitAnswer();
+
 }
 
 }
@@ -1834,10 +1929,14 @@ if(submitButton.disabled) {
 }
 
 
+const inputElement =
+document.getElementById(
+"answerInput"
+);
+
+
 const input =
-document
-.getElementById("answerInput")
-.value;
+inputElement.value;
 
 
 const answer =
@@ -1850,6 +1949,8 @@ showFeedback(
 "Type an answer first.",
 "wrong"
 );
+
+inputElement.focus();
 
 return;
 
@@ -1920,10 +2021,7 @@ showFeedback(
 );
 
 
-document
-.getElementById("answerInput")
-.select();
-
+inputElement.select();
 
 return;
 
@@ -2022,11 +2120,6 @@ if(
 currentIndex <
 currentSignals.length
 ) {
-
-document.getElementById(
-"answerInput"
-).disabled = false;
-
 
 loadCurrentSignal();
 
@@ -2127,6 +2220,8 @@ document
 .addEventListener(
 "click",
 () => {
+
+if(!nextDifficulty) return;
 
 startDifficulty(
 nextDifficulty
@@ -2250,7 +2345,10 @@ await supabase
 
 if(error) {
 
-console.error(error);
+console.error(
+"Leaderboard load error:",
+error
+);
 
 list.innerHTML =
 `<div class="empty">
@@ -2294,11 +2392,11 @@ list.innerHTML =
 entries
 .map((entry,index) => {
 
-let rank =
+const rank =
 index + 1;
 
 
-let medal =
+const medal =
 rank === 1
 ? "🥇"
 : rank === 2
@@ -2308,7 +2406,7 @@ rank === 1
 : rank;
 
 
-let rowClass =
+const rowClass =
 rank === 1
 ? "top-one"
 : rank === 2
@@ -2350,7 +2448,7 @@ ${escapeHTML(entry.player_name)}
 </div>
 
 <div class="leader-score">
-${entry.score} pts
+${Number(entry.score) || 0} pts
 </div>
 
 <div class="leader-date">
@@ -2399,13 +2497,7 @@ loadLeaderboard
 );
 
 
-document
-.getElementById(
-"leaderboardPlayAgain"
-)
-.addEventListener(
-"click",
-() => {
+function resetToNameScreen() {
 
 playerName = "";
 
@@ -2417,7 +2509,13 @@ currentSignals = [];
 
 currentIndex = 0;
 
+health = 3;
+
+currentSignal = null;
+
 gameSaved = false;
+
+nextDifficulty = null;
 
 
 document.getElementById(
@@ -2425,11 +2523,28 @@ document.getElementById(
 ).value = "";
 
 
+document.getElementById(
+"nameMessage"
+).textContent = "";
+
+
+resetGameControls();
+
+
 showScreen(
 "nameScreen"
 );
 
 }
+
+
+document
+.getElementById(
+"leaderboardPlayAgain"
+)
+.addEventListener(
+"click",
+resetToNameScreen
 );
 
 
@@ -2443,31 +2558,7 @@ document
 )
 .addEventListener(
 "click",
-() => {
-
-playerName = "";
-
-score = 0;
-
-currentDifficulty = "easy";
-
-currentSignals = [];
-
-currentIndex = 0;
-
-gameSaved = false;
-
-
-document.getElementById(
-"playerName"
-).value = "";
-
-
-showScreen(
-"nameScreen"
-);
-
-}
+resetToNameScreen
 );
 
 
@@ -2541,6 +2632,10 @@ document.getElementById(
 
 }
 
+
+/* =====================================================
+BACK TO PLAYER
+===================================================== */
 
 document
 .getElementById(
@@ -3059,6 +3154,10 @@ document.getElementById(
 );
 
 
+audio.pause();
+
+audio.currentTime = 0;
+
 audio.src = url;
 
 
@@ -3270,7 +3369,7 @@ entry.player_name
 </div>
 
 <div class="admin-leader-score">
-${entry.score}
+${Number(entry.score) || 0}
 </div>
 
 <button
@@ -3396,11 +3495,9 @@ document
 
 isAdmin = false;
 
-
 document.getElementById(
 "adminPassword"
 ).value = "";
-
 
 showScreen(
 "nameScreen"
