@@ -29,7 +29,7 @@
 body {
     min-height: 100vh;
     background:
-        radial-gradient(circle at 50% -10%, rgba(75, 255, 120, 0.10), transparent 35%),
+        radial-gradient(circle at 50% -10%, rgba(75,255,120,.10), transparent 35%),
         var(--bg);
     color: var(--text);
     font-family: Arial, Helvetica, sans-serif;
@@ -43,6 +43,12 @@ select {
 
 button {
     cursor: pointer;
+}
+
+button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    transform: none !important;
 }
 
 .screen {
@@ -72,7 +78,7 @@ button {
 
 h1 {
     text-align: center;
-    font-size: clamp(38px, 8vw, 72px);
+    font-size: clamp(38px,8vw,72px);
     line-height: .95;
     letter-spacing: -3px;
     margin-bottom: 16px;
@@ -87,7 +93,7 @@ h1 {
 }
 
 .card {
-    background: linear-gradient(145deg, var(--panel), var(--panel2));
+    background: linear-gradient(145deg,var(--panel),var(--panel2));
     border: 1px solid var(--line);
     border-radius: 22px;
     padding: 28px;
@@ -196,6 +202,14 @@ select:focus {
     border-radius: 12px;
 }
 
+.points-label {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
 .progress {
     height: 5px;
     background: #172018;
@@ -212,10 +226,10 @@ select:focus {
 }
 
 .game-card {
-    background: linear-gradient(145deg, #0c130d, #111a12);
+    background: linear-gradient(145deg,#0c130d,#111a12);
     border: 1px solid var(--line);
     border-radius: 25px;
-    padding: clamp(22px, 5vw, 45px);
+    padding: clamp(22px,5vw,45px);
 }
 
 .signal-number {
@@ -272,6 +286,7 @@ select:focus {
     text-align: center;
     min-height: 25px;
     font-weight: 700;
+    margin-top: 12px;
 }
 
 .feedback.correct {
@@ -280,6 +295,11 @@ select:focus {
 
 .feedback.wrong {
     color: var(--danger);
+}
+
+.feedback.reveal {
+    color: var(--yellow);
+    font-size: 17px;
 }
 
 /* TRANSITION */
@@ -301,6 +321,93 @@ select:focus {
 .transition p {
     color: var(--muted);
     margin-bottom: 28px;
+}
+
+/* LEADERBOARD */
+
+.leaderboard-wrap {
+    width: 100%;
+    max-width: 850px;
+    margin: auto;
+}
+
+.leaderboard-title {
+    text-align: center;
+    font-size: clamp(35px,7vw,58px);
+    letter-spacing: -2px;
+    margin-bottom: 10px;
+}
+
+.leaderboard-subtitle {
+    text-align: center;
+    color: var(--muted);
+    margin-bottom: 30px;
+}
+
+.leaderboard-card {
+    background: linear-gradient(145deg,var(--panel),var(--panel2));
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    overflow: hidden;
+}
+
+.leader-row {
+    display: grid;
+    grid-template-columns: 70px 1fr 100px 170px;
+    align-items: center;
+    gap: 15px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--line);
+}
+
+.leader-row:last-child {
+    border-bottom: none;
+}
+
+.leader-rank {
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.leader-name {
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.leader-score {
+    text-align: right;
+    color: var(--green);
+    font-weight: 900;
+}
+
+.leader-date {
+    text-align: right;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.top-one {
+    background: rgba(255,230,109,.05);
+}
+
+.top-two {
+    background: rgba(255,255,255,.025);
+}
+
+.top-three {
+    background: rgba(168,255,120,.035);
+}
+
+.leaderboard-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.leaderboard-buttons button {
+    flex: 1;
 }
 
 /* ADMIN */
@@ -325,7 +432,7 @@ select:focus {
 
 .stats {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4,1fr);
     gap: 12px;
     margin-bottom: 20px;
 }
@@ -438,19 +545,63 @@ select:focus {
     font-size: 13px;
 }
 
+.admin-section {
+    margin-top: 18px;
+}
+
+.admin-section h3 {
+    margin-bottom: 15px;
+}
+
+.admin-leaderboard-list {
+    display: grid;
+    gap: 10px;
+}
+
+.admin-leader-row {
+    display: grid;
+    grid-template-columns: 55px 1fr 90px 90px;
+    gap: 10px;
+    align-items: center;
+    background: #080e09;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px;
+}
+
+.admin-leader-score {
+    text-align: right;
+    color: var(--green);
+    font-weight: 900;
+}
+
 /* RESPONSIVE */
 
-@media(max-width: 800px) {
+@media(max-width:800px) {
+
     .admin-grid {
         grid-template-columns: 1fr;
     }
 
     .stats {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .leader-row {
+        grid-template-columns: 55px 1fr 80px;
+    }
+
+    .leader-date {
+        display: none;
+    }
+
+    .admin-leader-row {
+        grid-template-columns: 45px 1fr 70px 80px;
     }
 }
 
-@media(max-width: 550px) {
+@media(max-width:550px) {
+
     .screen {
         padding: 18px 12px;
     }
@@ -479,442 +630,631 @@ select:focus {
         align-items: flex-start;
         flex-direction: column;
     }
+
+    .leader-row {
+        grid-template-columns: 45px 1fr 70px;
+        padding: 14px;
+    }
+
+    .leader-score {
+        font-size: 14px;
+    }
+
+    .admin-leader-row {
+        grid-template-columns: 35px 1fr 60px 70px;
+        font-size: 13px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- ============================= -->
-<!-- PLAYER NAME -->
-<!-- ============================= -->
+<!-- NAME -->
 
 <section id="nameScreen" class="screen active">
-    <div class="center">
 
-        <div class="logo">Wildlife Week • Signal Hunt</div>
+<div class="center">
 
-        <h1>Wildlife<br>Signal Hunt</h1>
+<div class="logo">
+Wildlife Week • Signal Hunt
+</div>
 
-        <p class="subtitle">
-            Listen carefully.<br>
-            Identify the signal. Survive all three tiers.
-        </p>
+<h1>
+Wildlife<br>Signal Hunt
+</h1>
 
-        <div class="card">
+<p class="subtitle">
+Listen carefully.<br>
+Identify the signal. Survive all three tiers.
+</p>
 
-            <div class="field">
-                <label for="playerName">YOUR NAME</label>
-                <input
-                    id="playerName"
-                    type="text"
-                    autocomplete="off"
-                    placeholder="Enter your name"
-                    maxlength="40"
-                >
-            </div>
+<div class="card">
 
-            <button class="primary" id="startButton">
-                ENTER THE HUNT →
-            </button>
+<div class="field">
 
-            <div id="nameMessage" class="message"></div>
+<label for="playerName">
+YOUR NAME
+</label>
 
-        </div>
-    </div>
+<input
+id="playerName"
+type="text"
+autocomplete="off"
+placeholder="Enter your name"
+maxlength="40"
+>
+
+</div>
+
+<button class="primary" id="startButton">
+ENTER THE HUNT →
+</button>
+
+<div id="nameMessage" class="message"></div>
+
+</div>
+
+</div>
+
 </section>
 
 
-<!-- ============================= -->
 <!-- ADMIN PASSWORD -->
-<!-- ============================= -->
 
 <section id="adminPasswordScreen" class="screen">
-    <div class="center">
 
-        <div class="logo">Restricted Access</div>
+<div class="center">
 
-        <h1>Admin</h1>
+<div class="logo">
+Restricted Access
+</div>
 
-        <p class="subtitle">
-            Wildlife Signal Hunt control panel
-        </p>
+<h1>Admin</h1>
 
-        <div class="card">
+<p class="subtitle">
+Wildlife Signal Hunt control panel
+</p>
 
-            <div class="field">
-                <label>USERNAME</label>
-                <input
-                    id="adminUsername"
-                    type="text"
-                    value="zoo"
-                    readonly
-                >
-            </div>
+<div class="card">
 
-            <div class="field">
-                <label>PASSWORD</label>
-                <input
-                    id="adminPassword"
-                    type="password"
-                    autocomplete="off"
-                    placeholder="Enter password"
-                >
-            </div>
+<div class="field">
 
-            <button class="primary" id="adminLoginButton">
-                ENTER ADMIN →
-            </button>
+<label>USERNAME</label>
 
-            <button
-                class="secondary"
-                id="backToPlayerButton"
-                style="width:100%; margin-top:10px;"
-            >
-                ← BACK
-            </button>
+<input
+id="adminUsername"
+type="text"
+value="zoo"
+readonly
+>
 
-            <div id="adminLoginMessage" class="message"></div>
+</div>
 
-        </div>
-    </div>
+<div class="field">
+
+<label>PASSWORD</label>
+
+<input
+id="adminPassword"
+type="password"
+autocomplete="off"
+placeholder="Enter password"
+>
+
+</div>
+
+<button class="primary" id="adminLoginButton">
+ENTER ADMIN →
+</button>
+
+<button
+class="secondary"
+id="backToPlayerButton"
+style="width:100%;margin-top:10px;"
+>
+← BACK
+</button>
+
+<div id="adminLoginMessage" class="message"></div>
+
+</div>
+
+</div>
+
 </section>
 
 
-<!-- ============================= -->
 <!-- GAME -->
-<!-- ============================= -->
 
 <section id="gameScreen" class="screen">
 
-    <div class="game-wrap">
+<div class="game-wrap">
 
-        <div class="topbar">
+<div class="topbar">
 
-            <div>
-                <div class="tier" id="gameTier">EASY</div>
-                <div id="playerDisplay" style="margin-top:5px;"></div>
-            </div>
+<div>
 
-            <div class="score">
-                SCORE:
-                <strong id="scoreDisplay">0</strong>
-            </div>
+<div class="tier" id="gameTier">
+EASY
+</div>
 
-        </div>
+<div
+id="playerDisplay"
+style="margin-top:5px;"
+></div>
 
-        <div class="progress">
-            <div id="progressFill" class="progress-fill"></div>
-        </div>
+</div>
 
-        <div class="game-card">
+<div class="score">
 
-            <div class="signal-number" id="signalNumber">
-                SIGNAL 1 / 1
-            </div>
+SCORE:
+<strong id="scoreDisplay">0</strong>
 
-            <button class="sound-button" id="playSoundButton">
-                🔊
-            </button>
+</div>
 
-            <div class="sound-status" id="soundStatus">
-                Press the button to listen
-            </div>
+</div>
 
-            <div class="health" id="healthDisplay">
-                ❤️ ❤️ ❤️
-            </div>
+<div
+class="points-label"
+id="pointsLabel"
+>
+THIS TIER: +1 POINT PER CORRECT ANSWER
+</div>
 
-            <div class="answer-row">
+<div class="progress">
 
-                <input
-                    id="answerInput"
-                    type="text"
-                    autocomplete="off"
-                    placeholder="What animal is this?"
-                >
+<div
+id="progressFill"
+class="progress-fill"
+></div>
 
-                <button class="primary" id="submitAnswer">
-                    SUBMIT
-                </button>
+</div>
 
-            </div>
+<div class="game-card">
 
-            <div id="feedback" class="feedback"></div>
+<div
+class="signal-number"
+id="signalNumber"
+>
+SIGNAL 1 / 1
+</div>
 
-        </div>
+<button
+class="sound-button"
+id="playSoundButton"
+>
+🔊
+</button>
 
-    </div>
+<div
+class="sound-status"
+id="soundStatus"
+>
+Press the button to listen
+</div>
+
+<div
+class="health"
+id="healthDisplay"
+>
+❤️ ❤️ ❤️
+</div>
+
+<div class="answer-row">
+
+<input
+id="answerInput"
+type="text"
+autocomplete="off"
+placeholder="What animal is this?"
+>
+
+<button
+class="primary"
+id="submitAnswer"
+>
+SUBMIT
+</button>
+
+</div>
+
+<div
+id="feedback"
+class="feedback"
+></div>
+
+</div>
+
+</div>
 
 </section>
 
 
-<!-- ============================= -->
 <!-- TRANSITION -->
-<!-- ============================= -->
 
 <section id="transitionScreen" class="screen">
-    <div class="center">
 
-        <div class="card transition">
+<div class="center">
 
-            <div class="big" id="transitionEmoji">
-                ✓
-            </div>
+<div class="card transition">
 
-            <h2 id="transitionTitle">
-                Easy Complete
-            </h2>
+<div
+class="big"
+id="transitionEmoji"
+>
+✓
+</div>
 
-            <p id="transitionText">
-                You've cleared the first tier.
-            </p>
+<h2 id="transitionTitle">
+Easy Complete
+</h2>
 
-            <button class="primary" id="continueButton">
-                CONTINUE →
-            </button>
+<p id="transitionText">
+You've cleared the first tier.
+</p>
 
-        </div>
+<button
+class="primary"
+id="continueButton"
+>
+CONTINUE →
+</button>
 
-    </div>
+</div>
+
+</div>
+
 </section>
 
 
-<!-- ============================= -->
 <!-- COMPLETION -->
-<!-- ============================= -->
 
 <section id="completionScreen" class="screen">
-    <div class="center">
 
-        <div class="card transition">
+<div class="center">
 
-            <div class="big">🏆</div>
+<div class="card transition">
 
-            <h2>HUNT COMPLETE</h2>
+<div class="big">
+🏆
+</div>
 
-            <p>
-                You survived Easy, Medium and Hard.
-            </p>
+<h2>
+HUNT COMPLETE
+</h2>
 
-            <div style="
-                font-size:48px;
-                font-weight:900;
-                color:var(--green);
-                margin:25px 0;
-            " id="finalScore">
-                0
-            </div>
+<p>
+You survived Easy, Medium and Hard.
+</p>
 
-            <p id="finalPlayer"></p>
+<div
+style="
+font-size:48px;
+font-weight:900;
+color:var(--green);
+margin:25px 0;
+"
+id="finalScore"
+>
+0
+</div>
 
-            <button
-                class="primary"
-                id="restartButton"
-                style="margin-top:20px;"
-            >
-                PLAY AGAIN
-            </button>
+<p id="finalPlayer"></p>
 
-        </div>
+<button
+class="primary"
+id="viewLeaderboardButton"
+style="margin-top:20px;"
+>
+VIEW LEADERBOARD →
+</button>
 
-    </div>
+<button
+class="secondary"
+id="restartButton"
+style="width:100%;margin-top:10px;"
+>
+PLAY AGAIN
+</button>
+
+</div>
+
+</div>
+
 </section>
 
 
-<!-- ============================= -->
-<!-- ADMIN DASHBOARD -->
-<!-- ============================= -->
+<!-- LEADERBOARD -->
+
+<section id="leaderboardScreen" class="screen">
+
+<div class="leaderboard-wrap">
+
+<div class="logo">
+Wildlife Week • Signal Hunt
+</div>
+
+<h1 class="leaderboard-title">
+🏆 LEADERBOARD
+</h1>
+
+<p class="leaderboard-subtitle">
+The hunters who conquered the signals.
+</p>
+
+<div class="leaderboard-card">
+
+<div id="leaderboardList">
+<div class="loading">
+Loading leaderboard...
+</div>
+</div>
+
+</div>
+
+<div class="leaderboard-buttons">
+
+<button
+class="secondary"
+id="refreshLeaderboard"
+>
+↻ REFRESH
+</button>
+
+<button
+class="primary"
+id="leaderboardPlayAgain"
+>
+PLAY AGAIN →
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ADMIN -->
 
 <section id="adminScreen" class="screen">
 
-    <div class="admin-wrap">
+<div class="admin-wrap">
 
-        <div class="admin-header">
+<div class="admin-header">
 
-            <div>
-                <div class="logo" style="text-align:left; margin-bottom:5px;">
-                    Control Panel
-                </div>
+<div>
 
-                <h2>Wildlife Library</h2>
-            </div>
+<div
+class="logo"
+style="text-align:left;margin-bottom:5px;"
+>
+Control Panel
+</div>
 
-            <button class="secondary" id="adminLogout">
-                LOG OUT
-            </button>
+<h2>Wildlife Library</h2>
 
-        </div>
+</div>
 
+<button
+class="secondary"
+id="adminLogout"
+>
+LOG OUT
+</button>
 
-        <div class="stats">
-
-            <div class="stat">
-                <small>TOTAL</small>
-                <strong id="totalCount">0</strong>
-            </div>
-
-            <div class="stat">
-                <small>EASY</small>
-                <strong id="easyCount">0</strong>
-            </div>
-
-            <div class="stat">
-                <small>MEDIUM</small>
-                <strong id="mediumCount">0</strong>
-            </div>
-
-            <div class="stat">
-                <small>HARD</small>
-                <strong id="hardCount">0</strong>
-            </div>
-
-        </div>
+</div>
 
 
-        <div class="admin-grid">
+<div class="stats">
 
-            <!-- ADD SIGNAL -->
+<div class="stat">
+<small>TOTAL SIGNALS</small>
+<strong id="totalCount">0</strong>
+</div>
 
-            <div class="card">
+<div class="stat">
+<small>EASY</small>
+<strong id="easyCount">0</strong>
+</div>
 
-                <h3 style="margin-bottom:20px;">
-                    + Add Signal
-                </h3>
+<div class="stat">
+<small>MEDIUM</small>
+<strong id="mediumCount">0</strong>
+</div>
 
-                <div class="field">
-                    <label>ANIMAL / WILDLIFE NAME</label>
+<div class="stat">
+<small>HARD</small>
+<strong id="hardCount">0</strong>
+</div>
 
-                    <input
-                        id="animalName"
-                        type="text"
-                        placeholder="Example: Tiger"
-                        maxlength="80"
-                    >
-                </div>
-
-
-                <div class="field">
-                    <label>DIFFICULTY</label>
-
-                    <select id="difficulty">
-
-                        <option value="easy">
-                            Easy
-                        </option>
-
-                        <option value="medium">
-                            Medium
-                        </option>
-
-                        <option value="hard">
-                            Hard
-                        </option>
-
-                    </select>
-                </div>
+</div>
 
 
-                <div class="field">
+<div class="admin-grid">
 
-                    <label>AUDIO FILE</label>
+<!-- ADD SIGNAL -->
 
-                    <input
-                        id="audioFile"
-                        type="file"
-                        accept="audio/*"
-                    >
+<div class="card">
 
-                    <span
-                        id="selectedFileName"
-                        class="file-name"
-                    ></span>
+<h3 style="margin-bottom:20px;">
++ Add Signal
+</h3>
 
-                </div>
+<div class="field">
+
+<label>
+ANIMAL / WILDLIFE NAME
+</label>
+
+<input
+id="animalName"
+type="text"
+placeholder="Example: Tiger"
+maxlength="80"
+>
+
+</div>
+
+<div class="field">
+
+<label>
+DIFFICULTY
+</label>
+
+<select id="difficulty">
+
+<option value="easy">
+Easy
+</option>
+
+<option value="medium">
+Medium
+</option>
+
+<option value="hard">
+Hard
+</option>
+
+</select>
+
+</div>
+
+<div class="field">
+
+<label>
+AUDIO FILE
+</label>
+
+<input
+id="audioFile"
+type="file"
+accept="audio/*"
+>
+
+<span
+id="selectedFileName"
+class="file-name"
+></span>
+
+</div>
+
+<button
+class="primary"
+id="uploadButton"
+>
+UPLOAD SIGNAL
+</button>
+
+<div
+id="uploadProgress"
+class="upload-progress"
+></div>
+
+</div>
 
 
-                <button
-                    class="primary"
-                    id="uploadButton"
-                >
-                    UPLOAD SIGNAL
-                </button>
+<!-- LIBRARY -->
 
-                <div
-                    id="uploadProgress"
-                    class="upload-progress"
-                ></div>
+<div class="card library">
 
-            </div>
+<div class="library-header">
+
+<h3>
+Current Signals
+</h3>
+
+<button
+class="secondary"
+id="refreshLibrary"
+>
+↻ Refresh
+</button>
+
+</div>
+
+<div
+id="signalList"
+class="signal-list"
+>
+
+<div class="loading">
+Loading library...
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 
-            <!-- LIBRARY -->
+<!-- ADMIN LEADERBOARD -->
 
-            <div class="card library">
+<div class="card admin-section">
 
-                <div class="library-header">
+<h3>
+🏆 Leaderboard Management
+</h3>
 
-                    <h3>Current Signals</h3>
+<p
+style="color:var(--muted);font-size:13px;margin-bottom:18px;"
+>
+Remove players from the public leaderboard here.
+</p>
 
-                    <button
-                        class="secondary"
-                        id="refreshLibrary"
-                    >
-                        ↻ Refresh
-                    </button>
+<div
+id="adminLeaderboardList"
+class="admin-leaderboard-list"
+>
 
-                </div>
+<div class="loading">
+Loading leaderboard...
+</div>
 
-                <div
-                    id="signalList"
-                    class="signal-list"
-                >
-                    <div class="loading">
-                        Loading library...
-                    </div>
-                </div>
+</div>
 
-            </div>
+</div>
 
-        </div>
-
-    </div>
+</div>
 
 </section>
 
 
-<!-- Hidden audio player -->
 <audio id="audioPlayer"></audio>
 
 
 <script type="module">
 
 /* =====================================================
-   SUPABASE
-   ===================================================== */
+SUPABASE
+===================================================== */
 
 import {
     createClient
-} from "https://esm.sh/@supabase/supabase-js@2";
+}
+from "https://esm.sh/@supabase/supabase-js@2";
 
 
 const SUPABASE_URL =
-    "https://hqjlrtvyuvfjxdvqtxoq.supabase.co";
+"https://hqjlrtvyuvfjxdvqtxoq.supabase.co";
+
 
 const SUPABASE_KEY =
-    "sb_publishable_UBbCJWtTXQBfz2-BHOum5w_IyaclsWd";
+"sb_publishable_UBbCJWtTXQBfz2-BHOUM5w_IyaclsWd";
 
 
 const supabase =
-    createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 
 /* =====================================================
-   GAME STATE
-   ===================================================== */
+GAME STATE
+===================================================== */
 
 let playerName = "";
 
@@ -932,1375 +1272,2247 @@ let currentSignal = null;
 
 let isAdmin = false;
 
+let gameSaved = false;
+
 
 /* =====================================================
-   HELPERS
-   ===================================================== */
+HELPERS
+===================================================== */
 
 function showScreen(id) {
 
-    document
-        .querySelectorAll(".screen")
-        .forEach(screen => {
-            screen.classList.remove("active");
-        });
+document
+.querySelectorAll(".screen")
+.forEach(screen => {
+    screen.classList.remove("active");
+});
 
-    document
-        .getElementById(id)
-        .classList.add("active");
+document
+.getElementById(id)
+.classList.add("active");
+
 }
 
 
 function escapeHTML(value) {
 
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+return String(value)
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
 }
 
 
 function shuffle(array) {
 
-    const copy = [...array];
+const copy = [...array];
 
-    for (
-        let i = copy.length - 1;
-        i > 0;
-        i--
-    ) {
+for (
+let i = copy.length - 1;
+i > 0;
+i--
+) {
 
-        const j =
-            Math.floor(Math.random() * (i + 1));
+const j =
+Math.floor(
+Math.random() * (i + 1)
+);
 
-        [
-            copy[i],
-            copy[j]
-        ] =
-        [
-            copy[j],
-            copy[i]
-        ];
-    }
+[
+copy[i],
+copy[j]
+] =
+[
+copy[j],
+copy[i]
+];
 
-    return copy;
+}
+
+return copy;
+
 }
 
 
 /* =====================================================
-   PLAYER ENTRY
-   ===================================================== */
+RESET GAME CONTROLS
+===================================================== */
+
+function resetGameControls() {
+
+const answerInput =
+document.getElementById("answerInput");
+
+const submitButton =
+document.getElementById("submitAnswer");
+
+const playButton =
+document.getElementById("playSoundButton");
+
+answerInput.disabled = false;
+
+submitButton.disabled = false;
+
+playButton.disabled = false;
+
+answerInput.value = "";
+
+document.getElementById("feedback").textContent = "";
+
+document.getElementById("feedback").className =
+"feedback";
+
+}
+
+
+/* =====================================================
+PLAYER ENTRY
+===================================================== */
 
 const playerNameInput =
-    document.getElementById("playerName");
+document.getElementById("playerName");
 
 
 document
-    .getElementById("startButton")
-    .addEventListener("click", startEntry);
+.getElementById("startButton")
+.addEventListener(
+"click",
+startEntry
+);
 
 
 playerNameInput
-    .addEventListener("keydown", event => {
+.addEventListener(
+"keydown",
+event => {
 
-        if (event.key === "Enter") {
-            startEntry();
-        }
+if(event.key === "Enter") {
+    startEntry();
+}
 
-    });
+}
+);
 
 
 function startEntry() {
 
-    const name =
-        playerNameInput.value.trim();
-
-    if (!name) {
-
-        document.getElementById(
-            "nameMessage"
-        ).textContent =
-            "Enter your name first.";
-
-        return;
-    }
+const name =
+playerNameInput.value.trim();
 
 
-    /*
-       SECRET ADMIN TRIGGER
-    */
+if(!name) {
 
-    if (name.toLowerCase() === "zoo") {
+document.getElementById(
+"nameMessage"
+).textContent =
+"Enter your name first.";
 
-        document.getElementById(
-            "nameMessage"
-        ).textContent = "";
+return;
 
-        document.getElementById(
-            "adminPassword"
-        ).value = "";
-
-        showScreen("adminPasswordScreen");
-
-        setTimeout(() => {
-            document
-                .getElementById("adminPassword")
-                .focus();
-        }, 100);
-
-        return;
-    }
+}
 
 
-    playerName = name;
+if(
+name.toLowerCase() === "zoo"
+) {
 
-    score = 0;
+document.getElementById(
+"nameMessage"
+).textContent = "";
 
-    currentDifficulty = "easy";
 
-    currentIndex = 0;
+document.getElementById(
+"adminPassword"
+).value = "";
 
-    document.getElementById(
-        "playerDisplay"
-    ).textContent =
-        playerName;
 
-    document.getElementById(
-        "scoreDisplay"
-    ).textContent =
-        score;
+showScreen(
+"adminPasswordScreen"
+);
 
-    startDifficulty("easy");
+
+setTimeout(() => {
+
+document
+.getElementById("adminPassword")
+.focus();
+
+},100);
+
+return;
+
+}
+
+
+playerName = name;
+
+score = 0;
+
+currentDifficulty = "easy";
+
+currentSignals = [];
+
+currentIndex = 0;
+
+currentSignal = null;
+
+health = 3;
+
+gameSaved = false;
+
+
+document.getElementById(
+"playerDisplay"
+).textContent =
+playerName;
+
+
+document.getElementById(
+"scoreDisplay"
+).textContent =
+score;
+
+
+startDifficulty("easy");
+
 }
 
 
 /* =====================================================
-   LOAD SIGNALS
-   ===================================================== */
+LOAD SIGNALS
+===================================================== */
 
 async function loadSignals(difficulty) {
 
-    const {
-        data,
-        error
-    } =
-    await supabase
-        .from("signals")
-        .select("*")
-        .eq("difficulty", difficulty);
+const {
+data,
+error
+} =
+await supabase
+.from("signals")
+.select("*")
+.eq("difficulty",difficulty);
 
-    if (error) {
 
-        console.error(error);
+if(error) {
 
-        throw new Error(
-            "Could not load signals."
-        );
-    }
+console.error(error);
 
-    return data || [];
+throw new Error(
+"Could not load signals."
+);
+
+}
+
+
+return data || [];
+
 }
 
 
 /* =====================================================
-   START DIFFICULTY
-   ===================================================== */
+START DIFFICULTY
+===================================================== */
 
 async function startDifficulty(difficulty) {
 
-    try {
+try {
 
-        currentDifficulty = difficulty;
+currentDifficulty =
+difficulty;
 
-        const signals =
-            await loadSignals(difficulty);
+currentIndex = 0;
 
+currentSignal = null;
 
-        /*
-           Important:
-           A tier must have at least one signal.
-        */
-
-        if (signals.length === 0) {
-
-            showScreen("gameScreen");
-
-            document.getElementById(
-                "gameTier"
-            ).textContent =
-                difficulty.toUpperCase();
-
-            document.getElementById(
-                "signalNumber"
-            ).textContent =
-                "NO SIGNALS AVAILABLE";
-
-            document.getElementById(
-                "soundStatus"
-            ).textContent =
-                "The admin has not added any signals to this tier yet.";
-
-            document.getElementById(
-                "playSoundButton"
-            ).disabled = true;
-
-            document.getElementById(
-                "submitAnswer"
-            ).disabled = true;
-
-            return;
-        }
+resetGameControls();
 
 
-        currentSignals =
-            shuffle(signals);
+const signals =
+await loadSignals(difficulty);
 
-        currentIndex = 0;
 
-        showScreen("gameScreen");
+showScreen("gameScreen");
 
-        loadCurrentSignal();
 
-    }
+document.getElementById(
+"gameTier"
+).textContent =
+difficulty.toUpperCase();
 
-    catch (error) {
 
-        console.error(error);
+const points =
+getPointsForDifficulty(difficulty);
 
-        alert(
-            "Could not connect to the Wildlife Signal Hunt server."
-        );
 
-    }
+document.getElementById(
+"pointsLabel"
+).textContent =
+`THIS TIER: +${points} POINT${points === 1 ? "" : "S"} PER CORRECT ANSWER`;
+
+
+if(signals.length === 0) {
+
+document.getElementById(
+"signalNumber"
+).textContent =
+"NO SIGNALS AVAILABLE";
+
+
+document.getElementById(
+"soundStatus"
+).textContent =
+"The admin has not added any signals to this tier yet.";
+
+
+document.getElementById(
+"playSoundButton"
+).disabled = true;
+
+
+document.getElementById(
+"submitAnswer"
+).disabled = true;
+
+
+document.getElementById(
+"answerInput"
+).disabled = true;
+
+return;
+
+}
+
+
+currentSignals =
+shuffle(signals);
+
+
+loadCurrentSignal();
+
+}
+
+catch(error) {
+
+console.error(error);
+
+alert(
+"Could not connect to the Wildlife Signal Hunt server."
+);
+
+}
+
 }
 
 
 /* =====================================================
-   CURRENT SIGNAL
-   ===================================================== */
+CURRENT SIGNAL
+===================================================== */
 
 function loadCurrentSignal() {
 
-    currentSignal =
-        currentSignals[currentIndex];
+if(!currentSignals.length) {
+    return;
+}
 
-    health = 3;
 
-    document.getElementById(
-        "gameTier"
-    ).textContent =
-        currentDifficulty.toUpperCase();
+currentSignal =
+currentSignals[currentIndex];
 
-    document.getElementById(
-        "signalNumber"
-    ).textContent =
-        `SIGNAL ${currentIndex + 1} / ${currentSignals.length}`;
 
-    document.getElementById(
-        "scoreDisplay"
-    ).textContent =
-        score;
+health = 3;
 
-    document.getElementById(
-        "answerInput"
-    ).value = "";
 
-    document.getElementById(
-        "feedback"
-    ).textContent = "";
+const points =
+getPointsForDifficulty(
+currentDifficulty
+);
 
-    document.getElementById(
-        "feedback"
-    ).className = "feedback";
 
-    document.getElementById(
-        "soundStatus"
-    ).textContent =
-        "Press the button to listen";
+document.getElementById(
+"gameTier"
+).textContent =
+currentDifficulty.toUpperCase();
 
-    updateHealth();
 
-    updateProgress();
+document.getElementById(
+"pointsLabel"
+).textContent =
+`THIS TIER: +${points} POINT${points === 1 ? "" : "S"} PER CORRECT ANSWER`;
 
-    document.getElementById(
-        "playSoundButton"
-    ).disabled = false;
 
-    document.getElementById(
-        "submitAnswer"
-    ).disabled = false;
+document.getElementById(
+"signalNumber"
+).textContent =
+`SIGNAL ${currentIndex + 1} / ${currentSignals.length}`;
 
-    setTimeout(() => {
 
-        document
-            .getElementById("answerInput")
-            .focus();
+document.getElementById(
+"scoreDisplay"
+).textContent =
+score;
 
-    }, 100);
+
+document.getElementById(
+"answerInput"
+).value = "";
+
+
+document.getElementById(
+"feedback"
+).textContent = "";
+
+
+document.getElementById(
+"feedback"
+).className =
+"feedback";
+
+
+document.getElementById(
+"soundStatus"
+).textContent =
+"Press the button to listen";
+
+
+updateHealth();
+
+updateProgress();
+
+
+/* IMPORTANT:
+   Every new signal unlocks every control.
+*/
+
+document.getElementById(
+"answerInput"
+).disabled = false;
+
+
+document.getElementById(
+"submitAnswer"
+).disabled = false;
+
+
+document.getElementById(
+"playSoundButton"
+).disabled = false;
+
+
+setTimeout(() => {
+
+const input =
+document.getElementById("answerInput");
+
+if(!input.disabled) {
+    input.focus();
+}
+
+},100);
 
 }
 
 
 /* =====================================================
-   HEALTH
-   ===================================================== */
+POINT SYSTEM
+===================================================== */
+
+function getPointsForDifficulty(difficulty) {
+
+if(difficulty === "easy") {
+    return 1;
+}
+
+if(difficulty === "medium") {
+    return 2;
+}
+
+if(difficulty === "hard") {
+    return 3;
+}
+
+return 1;
+
+}
+
+
+/* =====================================================
+HEALTH
+===================================================== */
 
 function updateHealth() {
 
-    let output = "";
+let output = "";
 
-    for (let i = 0; i < 3; i++) {
+for(let i = 0;i < 3;i++) {
 
-        output +=
-            i < health
-                ? "❤️ "
-                : "🖤 ";
+output +=
+i < health
+? "❤️ "
+: "🖤 ";
 
-    }
+}
 
-    document.getElementById(
-        "healthDisplay"
-    ).textContent =
-        output.trim();
+document.getElementById(
+"healthDisplay"
+).textContent =
+output.trim();
+
 }
 
 
 /* =====================================================
-   PROGRESS
-   ===================================================== */
+PROGRESS
+===================================================== */
 
 function updateProgress() {
 
-    const percentage =
-        (
-            currentIndex /
-            currentSignals.length
-        ) * 100;
+if(!currentSignals.length) {
 
-    document.getElementById(
-        "progressFill"
-    ).style.width =
-        `${percentage}%`;
+document.getElementById(
+"progressFill"
+).style.width =
+"0%";
+
+return;
+
+}
+
+
+const percentage =
+(
+(currentIndex) /
+currentSignals.length
+) * 100;
+
+
+document.getElementById(
+"progressFill"
+).style.width =
+`${percentage}%`;
+
 }
 
 
 /* =====================================================
-   PLAY SOUND
-   ===================================================== */
+PLAY SOUND
+===================================================== */
 
 document
-    .getElementById("playSoundButton")
-    .addEventListener("click", playCurrentSound);
+.getElementById("playSoundButton")
+.addEventListener(
+"click",
+playCurrentSound
+);
 
 
 async function playCurrentSound() {
 
-    if (!currentSignal) return;
+if(!currentSignal) return;
 
-    const audio =
-        document.getElementById("audioPlayer");
 
-    audio.src =
-        currentSignal.audio_url;
+if(
+document.getElementById(
+"playSoundButton"
+).disabled
+) {
+    return;
+}
 
-    try {
 
-        await audio.play();
+const audio =
+document.getElementById(
+"audioPlayer"
+);
 
-        document.getElementById(
-            "soundStatus"
-        ).textContent =
-            "Playing signal...";
 
-        audio.onended = () => {
+audio.pause();
 
-            document.getElementById(
-                "soundStatus"
-            ).textContent =
-                "Signal finished.";
+audio.currentTime = 0;
 
-        };
+audio.src =
+currentSignal.audio_url;
 
-    }
 
-    catch (error) {
+try {
 
-        console.error(error);
+await audio.play();
 
-        document.getElementById(
-            "soundStatus"
-        ).textContent =
-            "Could not play this audio.";
 
-    }
+document.getElementById(
+"soundStatus"
+).textContent =
+"Playing signal...";
+
+
+audio.onended = () => {
+
+document.getElementById(
+"soundStatus"
+).textContent =
+"Signal finished.";
+
+};
+
+}
+
+catch(error) {
+
+console.error(error);
+
+document.getElementById(
+"soundStatus"
+).textContent =
+"Could not play this audio.";
+
+}
+
 }
 
 
 /* =====================================================
-   ANSWER
-   ===================================================== */
+ANSWER
+===================================================== */
 
 document
-    .getElementById("submitAnswer")
-    .addEventListener("click", submitAnswer);
+.getElementById("submitAnswer")
+.addEventListener(
+"click",
+submitAnswer
+);
 
 
 document
-    .getElementById("answerInput")
-    .addEventListener("keydown", event => {
+.getElementById("answerInput")
+.addEventListener(
+"keydown",
+event => {
 
-        if (event.key === "Enter") {
-            submitAnswer();
-        }
+if(event.key === "Enter") {
 
-    });
+event.preventDefault();
+
+submitAnswer();
+
+}
+
+}
+);
 
 
 function normalizeAnswer(value) {
 
-    return value
-        .trim()
-        .toLowerCase()
-        .replace(/\s+/g, " ");
+return value
+.trim()
+.toLowerCase()
+.replace(/\s+/g," ");
+
 }
 
 
 function submitAnswer() {
 
-    if (!currentSignal) return;
-
-    const input =
-        document
-            .getElementById("answerInput")
-            .value;
-
-    const answer =
-        normalizeAnswer(input);
-
-    if (!answer) {
-
-        showFeedback(
-            "Type an answer first.",
-            "wrong"
-        );
-
-        return;
-    }
+if(!currentSignal) return;
 
 
-    /*
-       Allows admin to enter:
-       Tiger
-       Tiger, Bengal Tiger
-       Tiger / Bengal Tiger
-    */
-
-    const acceptedAnswers =
-        currentSignal.animal_name
-            .split(/[,/|]/)
-            .map(normalizeAnswer)
-            .filter(Boolean);
+const submitButton =
+document.getElementById(
+"submitAnswer"
+);
 
 
-    const correct =
-        acceptedAnswers.includes(answer);
+if(submitButton.disabled) {
+    return;
+}
 
 
-    if (correct) {
-
-        score++;
-
-        document.getElementById(
-            "scoreDisplay"
-        ).textContent =
-            score;
-
-        showFeedback(
-            "✓ CORRECT!",
-            "correct"
-        );
-
-        setTimeout(() => {
-
-            completeSignal();
-
-        }, 700);
-
-        return;
-    }
+const inputElement =
+document.getElementById(
+"answerInput"
+);
 
 
-    health--;
-
-    updateHealth();
-
-    if (health > 0) {
-
-        showFeedback(
-            `Wrong. ${health} ${health === 1 ? "try" : "tries"} left.`,
-            "wrong"
-        );
-
-        document
-            .getElementById("answerInput")
-            .select();
-
-        return;
-    }
+const input =
+inputElement.value;
 
 
-    showFeedback(
-        "No health left. Signal completed.",
-        "wrong"
-    );
+const answer =
+normalizeAnswer(input);
 
-    setTimeout(() => {
 
-        completeSignal();
+if(!answer) {
 
-    }, 1000);
+showFeedback(
+"Type an answer first.",
+"wrong"
+);
+
+inputElement.focus();
+
+return;
+
+}
+
+
+const acceptedAnswers =
+currentSignal.animal_name
+.split(/[,/|]/)
+.map(normalizeAnswer)
+.filter(Boolean);
+
+
+const correct =
+acceptedAnswers.includes(answer);
+
+
+if(correct) {
+
+const points =
+getPointsForDifficulty(
+currentDifficulty
+);
+
+
+score += points;
+
+
+document.getElementById(
+"scoreDisplay"
+).textContent =
+score;
+
+
+showFeedback(
+`✓ CORRECT! +${points} POINT${points === 1 ? "" : "S"}`,
+"correct"
+);
+
+
+lockAnswerControls();
+
+
+setTimeout(() => {
+
+completeSignal();
+
+},700);
+
+
+return;
+
+}
+
+
+/* WRONG */
+
+health--;
+
+updateHealth();
+
+
+if(health > 0) {
+
+showFeedback(
+`Wrong. ${health} ${health === 1 ? "try" : "tries"} left.`,
+"wrong"
+);
+
+
+inputElement.select();
+
+return;
+
 }
 
 
 /* =====================================================
-   FEEDBACK
-   ===================================================== */
+ZERO HEALTH = REVEAL ANSWER
+===================================================== */
 
-function showFeedback(text, type) {
+const correctAnswer =
+currentSignal.animal_name
+.split(/[,/|]/)[0]
+.trim();
 
-    const feedback =
-        document.getElementById("feedback");
 
-    feedback.textContent = text;
+showFeedback(
+`❌ OUT OF HEALTH — Answer: ${correctAnswer}`,
+"reveal"
+);
 
-    feedback.className =
-        `feedback ${type}`;
+
+document.getElementById(
+"soundStatus"
+).textContent =
+"Signal completed without points.";
+
+
+lockAnswerControls();
+
+
+setTimeout(() => {
+
+completeSignal();
+
+},2200);
+
 }
 
 
 /* =====================================================
-   COMPLETE SIGNAL
-   ===================================================== */
+FEEDBACK
+===================================================== */
+
+function showFeedback(text,type) {
+
+const feedback =
+document.getElementById(
+"feedback"
+);
+
+
+feedback.textContent =
+text;
+
+
+feedback.className =
+`feedback ${type}`;
+
+}
+
+
+/* =====================================================
+LOCK CONTROLS
+===================================================== */
+
+function lockAnswerControls() {
+
+document.getElementById(
+"submitAnswer"
+).disabled = true;
+
+
+document.getElementById(
+"answerInput"
+).disabled = true;
+
+
+document.getElementById(
+"playSoundButton"
+).disabled = true;
+
+}
+
+
+/* =====================================================
+COMPLETE SIGNAL
+===================================================== */
 
 function completeSignal() {
 
-    currentIndex++;
-
-    if (
-        currentIndex <
-        currentSignals.length
-    ) {
-
-        loadCurrentSignal();
-
-        return;
-    }
+currentIndex++;
 
 
-    /*
-       Entire tier complete
-    */
+if(
+currentIndex <
+currentSignals.length
+) {
 
-    if (currentDifficulty === "easy") {
+loadCurrentSignal();
 
-        showTransition(
-            "MEDIUM",
-            "Easy Complete",
-            "You've cleared Easy. The signals get harder from here."
-        );
+return;
 
-        return;
-    }
+}
 
 
-    if (currentDifficulty === "medium") {
+/* TIER COMPLETE */
 
-        showTransition(
-            "HARD",
-            "Medium Complete",
-            "You've made it to the final tier. Good luck."
-        );
+if(currentDifficulty === "easy") {
 
-        return;
-    }
+showTransition(
+"MEDIUM",
+"Easy Complete",
+"You've cleared Easy. Signals are now worth 2 points."
+);
+
+return;
+
+}
 
 
-    if (currentDifficulty === "hard") {
+if(currentDifficulty === "medium") {
 
-        finishGame();
+showTransition(
+"HARD",
+"Medium Complete",
+"You've made it to the final tier. Signals are now worth 3 points."
+);
 
-    }
+return;
+
+}
+
+
+if(currentDifficulty === "hard") {
+
+finishGame();
+
+}
+
 }
 
 
 /* =====================================================
-   TRANSITION
-   ===================================================== */
+TRANSITION
+===================================================== */
 
 let nextDifficulty = null;
 
 
 function showTransition(
-    next,
-    title,
-    text
+next,
+title,
+text
 ) {
 
-    nextDifficulty =
-        next.toLowerCase();
+nextDifficulty =
+next.toLowerCase();
 
-    document.getElementById(
-        "transitionTitle"
-    ).textContent =
-        title;
 
-    document.getElementById(
-        "transitionText"
-    ).textContent =
-        text;
+document.getElementById(
+"transitionTitle"
+).textContent =
+title;
 
-    document.getElementById(
-        "transitionEmoji"
-    ).textContent =
-        next === "MEDIUM"
-            ? "Ⅱ"
-            : "Ⅲ";
 
-    document.getElementById(
-        "continueButton"
-    ).textContent =
-        `ENTER ${next} →`;
+document.getElementById(
+"transitionText"
+).textContent =
+text;
 
-    showScreen("transitionScreen");
+
+document.getElementById(
+"transitionEmoji"
+).textContent =
+next === "MEDIUM"
+? "Ⅱ"
+: "Ⅲ";
+
+
+document.getElementById(
+"continueButton"
+).textContent =
+`ENTER ${next} →`;
+
+
+showScreen(
+"transitionScreen"
+);
+
 }
 
 
 document
-    .getElementById("continueButton")
-    .addEventListener("click", () => {
+.getElementById("continueButton")
+.addEventListener(
+"click",
+() => {
 
-        startDifficulty(nextDifficulty);
+if(!nextDifficulty) return;
 
-    });
+startDifficulty(
+nextDifficulty
+);
+
+}
+);
 
 
 /* =====================================================
-   GAME FINISH
-   ===================================================== */
+SAVE FINAL SCORE
+===================================================== */
 
-function finishGame() {
+async function saveFinalScore() {
 
-    document.getElementById(
-        "finalScore"
-    ).textContent =
-        score;
+if(gameSaved) {
+    return;
+}
 
-    document.getElementById(
-        "finalPlayer"
-    ).textContent =
-        playerName;
 
-    showScreen("completionScreen");
+gameSaved = true;
+
+
+try {
+
+const {
+error
+} =
+await supabase
+.from("leaderboard")
+.insert({
+    player_name: playerName,
+    score: score
+});
+
+
+if(error) {
+
+console.error(
+"Leaderboard save error:",
+error
+);
+
+}
+
+}
+catch(error) {
+
+console.error(
+"Could not save leaderboard score:",
+error
+);
+
+}
+
+}
+
+
+/* =====================================================
+GAME FINISH
+===================================================== */
+
+async function finishGame() {
+
+document.getElementById(
+"finalScore"
+).textContent =
+score;
+
+
+document.getElementById(
+"finalPlayer"
+).textContent =
+playerName;
+
+
+showScreen(
+"completionScreen"
+);
+
+
+/* Save score */
+
+await saveFinalScore();
+
+}
+
+
+/* =====================================================
+LEADERBOARD
+===================================================== */
+
+async function loadLeaderboard() {
+
+const list =
+document.getElementById(
+"leaderboardList"
+);
+
+
+list.innerHTML =
+`<div class="loading">
+Loading leaderboard...
+</div>`;
+
+
+const {
+data,
+error
+} =
+await supabase
+.from("leaderboard")
+.select("*")
+.order("score",{
+    ascending:false
+})
+.order("completed_at",{
+    ascending:true
+});
+
+
+if(error) {
+
+console.error(
+"Leaderboard load error:",
+error
+);
+
+list.innerHTML =
+`<div class="empty">
+Could not load leaderboard.
+</div>`;
+
+return;
+
+}
+
+
+renderLeaderboard(
+data || []
+);
+
+}
+
+
+function renderLeaderboard(entries) {
+
+const list =
+document.getElementById(
+"leaderboardList"
+);
+
+
+if(!entries.length) {
+
+list.innerHTML =
+`<div class="empty">
+No hunters yet.<br>
+Be the first to complete the hunt!
+</div>`;
+
+return;
+
+}
+
+
+list.innerHTML =
+entries
+.map((entry,index) => {
+
+const rank =
+index + 1;
+
+
+const medal =
+rank === 1
+? "🥇"
+: rank === 2
+? "🥈"
+: rank === 3
+? "🥉"
+: rank;
+
+
+const rowClass =
+rank === 1
+? "top-one"
+: rank === 2
+? "top-two"
+: rank === 3
+? "top-three"
+: "";
+
+
+let date = "";
+
+if(entry.completed_at) {
+
+date =
+new Date(
+entry.completed_at
+)
+.toLocaleDateString(
+undefined,
+{
+    day:"2-digit",
+    month:"short"
+}
+);
+
+}
+
+
+return `
+
+<div class="leader-row ${rowClass}">
+
+<div class="leader-rank">
+${medal}
+</div>
+
+<div class="leader-name">
+${escapeHTML(entry.player_name)}
+</div>
+
+<div class="leader-score">
+${Number(entry.score) || 0} pts
+</div>
+
+<div class="leader-date">
+${date}
+</div>
+
+</div>
+
+`;
+
+})
+.join("");
+
+}
+
+
+/* =====================================================
+LEADERBOARD BUTTONS
+===================================================== */
+
+document
+.getElementById(
+"viewLeaderboardButton"
+)
+.addEventListener(
+"click",
+async () => {
+
+showScreen(
+"leaderboardScreen"
+);
+
+await loadLeaderboard();
+
+}
+);
+
+
+document
+.getElementById(
+"refreshLeaderboard"
+)
+.addEventListener(
+"click",
+loadLeaderboard
+);
+
+
+function resetToNameScreen() {
+
+playerName = "";
+
+score = 0;
+
+currentDifficulty = "easy";
+
+currentSignals = [];
+
+currentIndex = 0;
+
+health = 3;
+
+currentSignal = null;
+
+gameSaved = false;
+
+nextDifficulty = null;
+
+
+document.getElementById(
+"playerName"
+).value = "";
+
+
+document.getElementById(
+"nameMessage"
+).textContent = "";
+
+
+resetGameControls();
+
+
+showScreen(
+"nameScreen"
+);
+
 }
 
 
 document
-    .getElementById("restartButton")
-    .addEventListener("click", () => {
-
-        playerName = "";
-
-        score = 0;
-
-        currentDifficulty = "easy";
-
-        currentSignals = [];
-
-        currentIndex = 0;
-
-        document.getElementById(
-            "playerName"
-        ).value = "";
-
-        showScreen("nameScreen");
-
-    });
+.getElementById(
+"leaderboardPlayAgain"
+)
+.addEventListener(
+"click",
+resetToNameScreen
+);
 
 
 /* =====================================================
-   ADMIN LOGIN
-   ===================================================== */
+RESTART
+===================================================== */
 
 document
-    .getElementById("adminLoginButton")
-    .addEventListener("click", adminLogin);
+.getElementById(
+"restartButton"
+)
+.addEventListener(
+"click",
+resetToNameScreen
+);
+
+
+/* =====================================================
+ADMIN LOGIN
+===================================================== */
+
+document
+.getElementById(
+"adminLoginButton"
+)
+.addEventListener(
+"click",
+adminLogin
+);
 
 
 document
-    .getElementById("adminPassword")
-    .addEventListener("keydown", event => {
+.getElementById(
+"adminPassword"
+)
+.addEventListener(
+"keydown",
+event => {
 
-        if (event.key === "Enter") {
-            adminLogin();
-        }
+if(event.key === "Enter") {
+    adminLogin();
+}
 
-    });
+}
+);
 
 
 function adminLogin() {
 
-    const password =
-        document.getElementById(
-            "adminPassword"
-        ).value;
+const password =
+document.getElementById(
+"adminPassword"
+).value;
 
 
-    if (
-        password === "s1zoo"
-    ) {
+if(password === "s1zoo") {
 
-        isAdmin = true;
-
-        document.getElementById(
-            "adminLoginMessage"
-        ).textContent = "";
-
-        showScreen("adminScreen");
-
-        loadAdminLibrary();
-
-        return;
-    }
+isAdmin = true;
 
 
-    document.getElementById(
-        "adminLoginMessage"
-    ).textContent =
-        "Incorrect password.";
+document.getElementById(
+"adminLoginMessage"
+).textContent =
+"";
+
+
+showScreen(
+"adminScreen"
+);
+
+
+loadAdminLibrary();
+
+loadAdminLeaderboard();
+
+return;
+
 }
 
 
-document
-    .getElementById("backToPlayerButton")
-    .addEventListener("click", () => {
+document.getElementById(
+"adminLoginMessage"
+).textContent =
+"Incorrect password.";
 
-        document.getElementById(
-            "adminPassword"
-        ).value = "";
-
-        document.getElementById(
-            "adminLoginMessage"
-        ).textContent = "";
-
-        showScreen("nameScreen");
-
-    });
+}
 
 
 /* =====================================================
-   ADMIN UPLOAD
-   ===================================================== */
+BACK TO PLAYER
+===================================================== */
 
 document
-    .getElementById("audioFile")
-    .addEventListener("change", () => {
+.getElementById(
+"backToPlayerButton"
+)
+.addEventListener(
+"click",
+() => {
 
-        const file =
-            document.getElementById(
-                "audioFile"
-            ).files[0];
+document.getElementById(
+"adminPassword"
+).value = "";
 
-        document.getElementById(
-            "selectedFileName"
-        ).textContent =
-            file
-                ? file.name
-                : "";
 
-    });
+document.getElementById(
+"adminLoginMessage"
+).textContent =
+"";
+
+
+showScreen(
+"nameScreen"
+);
+
+}
+);
+
+
+/* =====================================================
+ADMIN UPLOAD
+===================================================== */
+
+document
+.getElementById(
+"audioFile"
+)
+.addEventListener(
+"change",
+() => {
+
+const file =
+document.getElementById(
+"audioFile"
+).files[0];
+
+
+document.getElementById(
+"selectedFileName"
+).textContent =
+file
+? file.name
+: "";
+
+}
+);
 
 
 document
-    .getElementById("uploadButton")
-    .addEventListener("click", uploadSignal);
+.getElementById(
+"uploadButton"
+)
+.addEventListener(
+"click",
+uploadSignal
+);
 
 
 async function uploadSignal() {
 
-    if (!isAdmin) return;
+if(!isAdmin) return;
 
-    const animalName =
-        document.getElementById(
-            "animalName"
-        ).value.trim();
 
-    const difficulty =
-        document.getElementById(
-            "difficulty"
-        ).value;
+const animalName =
+document.getElementById(
+"animalName"
+).value.trim();
 
-    const file =
-        document.getElementById(
-            "audioFile"
-        ).files[0];
 
+const difficulty =
+document.getElementById(
+"difficulty"
+).value;
 
-    if (!animalName) {
 
-        alert(
-            "Enter the animal/wildlife name."
-        );
+const file =
+document.getElementById(
+"audioFile"
+).files[0];
 
-        return;
-    }
 
+if(!animalName) {
 
-    if (!file) {
+alert(
+"Enter the animal/wildlife name."
+);
 
-        alert(
-            "Choose an audio file."
-        );
+return;
 
-        return;
-    }
+}
 
 
-    /*
-       Limit file size to 50 MB.
-    */
+if(!file) {
 
-    if (file.size > 50 * 1024 * 1024) {
+alert(
+"Choose an audio file."
+);
 
-        alert(
-            "Audio file must be smaller than 50 MB."
-        );
+return;
 
-        return;
-    }
+}
 
 
-    const uploadButton =
-        document.getElementById(
-            "uploadButton"
-        );
+if(
+file.size >
+50 * 1024 * 1024
+) {
 
-    const progress =
-        document.getElementById(
-            "uploadProgress"
-        );
+alert(
+"Audio file must be smaller than 50 MB."
+);
 
+return;
 
-    uploadButton.disabled = true;
+}
 
-    progress.textContent =
-        "Uploading audio...";
 
+const uploadButton =
+document.getElementById(
+"uploadButton"
+);
 
-    try {
 
-        /*
-           Create unique file path.
-        */
+const progress =
+document.getElementById(
+"uploadProgress"
+);
 
-        const safeName =
-            file.name
-                .replace(/[^a-zA-Z0-9._-]/g, "_");
 
-        const uniquePath =
-            `${difficulty}/${Date.now()}_${crypto.randomUUID()}_${safeName}`;
+uploadButton.disabled =
+true;
 
 
-        /*
-           Upload audio to Supabase Storage.
-        */
+progress.textContent =
+"Uploading audio...";
 
-        const {
-            error: uploadError
-        } =
-        await supabase
-            .storage
-            .from("wildlife-audio")
-            .upload(
-                uniquePath,
-                file,
-                {
-                    cacheControl: "3600",
-                    upsert: false,
-                    contentType: file.type || "audio/mpeg"
-                }
-            );
 
+try {
 
-        if (uploadError) {
-            throw uploadError;
-        }
+const safeName =
+file.name
+.replace(
+/[^a-zA-Z0-9._-]/g,
+"_"
+);
 
 
-        progress.textContent =
-            "Audio uploaded. Saving signal...";
+const uniquePath =
+`${difficulty}/${Date.now()}_${crypto.randomUUID()}_${safeName}`;
 
 
-        /*
-           Get public URL.
-        */
+const {
+error:uploadError
+} =
+await supabase
+.storage
+.from("wildlife-audio")
+.upload(
+uniquePath,
+file,
+{
+    cacheControl:"3600",
+    upsert:false,
+    contentType:
+        file.type ||
+        "audio/mpeg"
+}
+);
 
-        const {
-            data: publicData
-        } =
-        supabase
-            .storage
-            .from("wildlife-audio")
-            .getPublicUrl(uniquePath);
 
+if(uploadError) {
+    throw uploadError;
+}
 
-        const audioUrl =
-            publicData.publicUrl;
 
+progress.textContent =
+"Audio uploaded. Saving signal...";
 
-        /*
-           Save signal in database.
-        */
 
-        const {
-            error: databaseError
-        } =
-        await supabase
-            .from("signals")
-            .insert({
-                animal_name: animalName,
-                difficulty: difficulty,
-                audio_url: audioUrl,
-                audio_path: uniquePath
-            });
+const {
+data:publicData
+} =
+supabase
+.storage
+.from("wildlife-audio")
+.getPublicUrl(
+uniquePath
+);
 
 
-        if (databaseError) {
+const audioUrl =
+publicData.publicUrl;
 
-            /*
-               If database insert fails,
-               remove the uploaded file so
-               Storage doesn't contain an orphan.
-            */
 
-            await supabase
-                .storage
-                .from("wildlife-audio")
-                .remove([uniquePath]);
+const {
+error:databaseError
+} =
+await supabase
+.from("signals")
+.insert({
+    animal_name:animalName,
+    difficulty:difficulty,
+    audio_url:audioUrl,
+    audio_path:uniquePath
+});
 
-            throw databaseError;
-        }
 
+if(databaseError) {
 
-        progress.textContent =
-            "✓ Signal added successfully!";
+await supabase
+.storage
+.from("wildlife-audio")
+.remove([
+    uniquePath
+]);
 
+throw databaseError;
 
-        /*
-           Clear form.
-        */
+}
 
-        document.getElementById(
-            "animalName"
-        ).value = "";
 
-        document.getElementById(
-            "audioFile"
-        ).value = "";
+progress.textContent =
+"✓ Signal added successfully!";
 
-        document.getElementById(
-            "selectedFileName"
-        ).textContent = "";
 
+document.getElementById(
+"animalName"
+).value = "";
 
-        await loadAdminLibrary();
 
-        setTimeout(() => {
+document.getElementById(
+"audioFile"
+).value = "";
 
-            progress.textContent = "";
 
-        }, 3000);
+document.getElementById(
+"selectedFileName"
+).textContent = "";
 
-    }
 
-    catch (error) {
+await loadAdminLibrary();
 
-        console.error(error);
 
-        progress.textContent = "";
+setTimeout(() => {
 
-        alert(
-            "Upload failed: " +
-            (error.message || "Unknown error")
-        );
+progress.textContent = "";
 
-    }
+},3000);
 
-    finally {
+}
+catch(error) {
 
-        uploadButton.disabled = false;
+console.error(error);
 
-    }
+progress.textContent = "";
+
+alert(
+"Upload failed: " +
+(error.message ||
+"Unknown error")
+);
+
+}
+finally {
+
+uploadButton.disabled =
+false;
+
+}
+
 }
 
 
 /* =====================================================
-   ADMIN LIBRARY
-   ===================================================== */
+ADMIN LIBRARY
+===================================================== */
 
 async function loadAdminLibrary() {
 
-    const list =
-        document.getElementById(
-            "signalList"
-        );
-
-    list.innerHTML =
-        `<div class="loading">Loading library...</div>`;
+const list =
+document.getElementById(
+"signalList"
+);
 
 
-    const {
-        data,
-        error
-    } =
-    await supabase
-        .from("signals")
-        .select("*")
-        .order("created_at", {
-            ascending: false
-        });
+list.innerHTML =
+`<div class="loading">
+Loading library...
+</div>`;
 
 
-    if (error) {
+const {
+data,
+error
+} =
+await supabase
+.from("signals")
+.select("*")
+.order(
+"created_at",
+{
+    ascending:false
+}
+);
 
-        console.error(error);
 
-        list.innerHTML =
-            `<div class="empty">
-                Could not load signals.
-            </div>`;
+if(error) {
 
-        return;
-    }
+console.error(error);
+
+list.innerHTML =
+`<div class="empty">
+Could not load signals.
+</div>`;
+
+return;
+
+}
 
 
-    updateStats(data || []);
+updateStats(
+data || []
+);
 
-    renderSignalList(data || []);
+
+renderSignalList(
+data || []
+);
+
 }
 
 
 /* =====================================================
-   STATS
-   ===================================================== */
+STATS
+===================================================== */
 
 function updateStats(signals) {
 
-    const easy =
-        signals.filter(
-            s => s.difficulty === "easy"
-        ).length;
-
-    const medium =
-        signals.filter(
-            s => s.difficulty === "medium"
-        ).length;
-
-    const hard =
-        signals.filter(
-            s => s.difficulty === "hard"
-        ).length;
+const easy =
+signals.filter(
+s => s.difficulty === "easy"
+).length;
 
 
-    document.getElementById(
-        "totalCount"
-    ).textContent =
-        signals.length;
+const medium =
+signals.filter(
+s => s.difficulty === "medium"
+).length;
 
-    document.getElementById(
-        "easyCount"
-    ).textContent =
-        easy;
 
-    document.getElementById(
-        "mediumCount"
-    ).textContent =
-        medium;
+const hard =
+signals.filter(
+s => s.difficulty === "hard"
+).length;
 
-    document.getElementById(
-        "hardCount"
-    ).textContent =
-        hard;
+
+document.getElementById(
+"totalCount"
+).textContent =
+signals.length;
+
+
+document.getElementById(
+"easyCount"
+).textContent =
+easy;
+
+
+document.getElementById(
+"mediumCount"
+).textContent =
+medium;
+
+
+document.getElementById(
+"hardCount"
+).textContent =
+hard;
+
 }
 
 
 /* =====================================================
-   RENDER LIBRARY
-   ===================================================== */
+RENDER LIBRARY
+===================================================== */
 
 function renderSignalList(signals) {
 
-    const list =
-        document.getElementById(
-            "signalList"
-        );
+const list =
+document.getElementById(
+"signalList"
+);
 
 
-    if (!signals.length) {
+if(!signals.length) {
 
-        list.innerHTML =
-            `<div class="empty">
-                No signals yet.<br>
-                Add your first wildlife sound.
-            </div>`;
+list.innerHTML =
+`<div class="empty">
+No signals yet.<br>
+Add your first wildlife sound.
+</div>`;
 
-        return;
-    }
+return;
 
-
-    list.innerHTML =
-        signals.map(signal => `
-
-            <div class="signal-item">
-
-                <div class="signal-info">
-
-                    <div class="signal-name">
-                        ${escapeHTML(signal.animal_name)}
-                    </div>
-
-                    <div class="signal-difficulty">
-                        ${escapeHTML(signal.difficulty)}
-                    </div>
-
-                </div>
-
-                <div class="signal-actions">
-
-                    <button
-                        class="play-small"
-                        data-play="${escapeHTML(signal.audio_url)}"
-                    >
-                        ▶
-                    </button>
-
-                    <button
-                        class="danger"
-                        data-delete="${signal.id}"
-                    >
-                        🗑
-                    </button>
-
-                </div>
-
-            </div>
-
-        `).join("");
+}
 
 
-    /*
-       Preview buttons
-    */
+list.innerHTML =
+signals
+.map(signal => `
 
-    list
-        .querySelectorAll("[data-play]")
-        .forEach(button => {
+<div class="signal-item">
 
-            button.addEventListener(
-                "click",
-                () => {
+<div class="signal-info">
 
-                    playAdminPreview(
-                        button.dataset.play
-                    );
+<div class="signal-name">
+${escapeHTML(
+signal.animal_name
+)}
+</div>
 
-                }
-            );
+<div class="signal-difficulty">
+${escapeHTML(
+signal.difficulty
+)}
+</div>
 
-        });
+</div>
+
+<div class="signal-actions">
+
+<button
+class="play-small"
+data-play="${escapeHTML(
+signal.audio_url
+)}"
+>
+▶
+</button>
+
+<button
+class="danger"
+data-delete="${signal.id}"
+>
+🗑
+</button>
+
+</div>
+
+</div>
+
+`)
+.join("");
 
 
-    /*
-       Delete buttons
-    */
+list
+.querySelectorAll(
+"[data-play]"
+)
+.forEach(button => {
 
-    list
-        .querySelectorAll("[data-delete]")
-        .forEach(button => {
+button.addEventListener(
+"click",
+() => {
 
-            button.addEventListener(
-                "click",
-                () => {
+playAdminPreview(
+button.dataset.play
+);
 
-                    deleteSignal(
-                        button.dataset.delete
-                    );
+}
+);
 
-                }
-            );
+});
 
-        });
+
+list
+.querySelectorAll(
+"[data-delete]"
+)
+.forEach(button => {
+
+button.addEventListener(
+"click",
+() => {
+
+deleteSignal(
+button.dataset.delete
+);
+
+}
+);
+
+});
+
 }
 
 
 /* =====================================================
-   ADMIN PREVIEW
-   ===================================================== */
+ADMIN PREVIEW
+===================================================== */
 
 function playAdminPreview(url) {
 
-    const audio =
-        document.getElementById(
-            "audioPlayer"
-        );
+const audio =
+document.getElementById(
+"audioPlayer"
+);
 
-    audio.src = url;
 
-    audio.play()
-        .catch(error => {
-            console.error(error);
-        });
+audio.pause();
+
+audio.currentTime = 0;
+
+audio.src = url;
+
+
+audio
+.play()
+.catch(
+error => {
+console.error(error);
+}
+);
+
 }
 
 
 /* =====================================================
-   DELETE SIGNAL
-   ===================================================== */
+DELETE SIGNAL
+===================================================== */
 
 async function deleteSignal(id) {
 
-    if (!isAdmin) return;
+if(!isAdmin) return;
 
 
-    const confirmed =
-        confirm(
-            "Delete this signal?\n\nThis will remove the database record and its audio file."
-        );
+const confirmed =
+confirm(
+"Delete this signal?\n\nThis will remove the database record and its audio file."
+);
 
 
-    if (!confirmed) return;
+if(!confirmed) return;
 
 
-    try {
+try {
 
-        /*
-           First get the signal's storage path.
-        */
-
-        const {
-            data: signal,
-            error: fetchError
-        } =
-        await supabase
-            .from("signals")
-            .select("audio_path")
-            .eq("id", id)
-            .single();
+const {
+data:signal,
+error:fetchError
+} =
+await supabase
+.from("signals")
+.select("audio_path")
+.eq("id",id)
+.single();
 
 
-        if (fetchError) {
-            throw fetchError;
-        }
+if(fetchError) {
+    throw fetchError;
+}
 
 
-        /*
-           Delete Storage file.
-        */
+if(signal.audio_path) {
 
-        if (signal.audio_path) {
-
-            const {
-                error: storageError
-            } =
-            await supabase
-                .storage
-                .from("wildlife-audio")
-                .remove([
-                    signal.audio_path
-                ]);
-
-            if (storageError) {
-                console.warn(
-                    "Storage delete warning:",
-                    storageError
-                );
-            }
-        }
+const {
+error:storageError
+} =
+await supabase
+.storage
+.from("wildlife-audio")
+.remove([
+    signal.audio_path
+]);
 
 
-        /*
-           Delete database record.
-        */
+if(storageError) {
 
-        const {
-            error: databaseError
-        } =
-        await supabase
-            .from("signals")
-            .delete()
-            .eq("id", id);
+console.warn(
+"Storage delete warning:",
+storageError
+);
 
+}
 
-        if (databaseError) {
-            throw databaseError;
-        }
+}
 
 
-        await loadAdminLibrary();
+const {
+error:databaseError
+} =
+await supabase
+.from("signals")
+.delete()
+.eq("id",id);
 
-    }
 
-    catch (error) {
+if(databaseError) {
+    throw databaseError;
+}
 
-        console.error(error);
 
-        alert(
-            "Could not delete signal: " +
-            (error.message || "Unknown error")
-        );
+await loadAdminLibrary();
 
-    }
+}
+catch(error) {
+
+console.error(error);
+
+alert(
+"Could not delete signal: " +
+(error.message ||
+"Unknown error")
+);
+
+}
+
 }
 
 
 /* =====================================================
-   REFRESH
-   ===================================================== */
+ADMIN LEADERBOARD
+===================================================== */
 
-document
-    .getElementById("refreshLibrary")
-    .addEventListener(
-        "click",
-        loadAdminLibrary
-    );
+async function loadAdminLeaderboard() {
+
+const list =
+document.getElementById(
+"adminLeaderboardList"
+);
+
+
+list.innerHTML =
+`<div class="loading">
+Loading leaderboard...
+</div>`;
+
+
+const {
+data,
+error
+} =
+await supabase
+.from("leaderboard")
+.select("*")
+.order("score",{
+    ascending:false
+})
+.order("completed_at",{
+    ascending:true
+});
+
+
+if(error) {
+
+console.error(error);
+
+list.innerHTML =
+`<div class="empty">
+Could not load leaderboard.
+</div>`;
+
+return;
+
+}
+
+
+renderAdminLeaderboard(
+data || []
+);
+
+}
+
+
+function renderAdminLeaderboard(entries) {
+
+const list =
+document.getElementById(
+"adminLeaderboardList"
+);
+
+
+if(!entries.length) {
+
+list.innerHTML =
+`<div class="empty">
+No players on the leaderboard yet.
+</div>`;
+
+return;
+
+}
+
+
+list.innerHTML =
+entries
+.map((entry,index) => {
+
+const rank =
+index + 1;
+
+
+return `
+
+<div class="admin-leader-row">
+
+<div>
+${rank}
+</div>
+
+<div
+style="
+min-width:0;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
+"
+>
+${escapeHTML(
+entry.player_name
+)}
+</div>
+
+<div class="admin-leader-score">
+${Number(entry.score) || 0}
+</div>
+
+<button
+class="danger"
+data-remove-player="${entry.id}"
+>
+REMOVE
+</button>
+
+</div>
+
+`;
+
+})
+.join("");
+
+
+list
+.querySelectorAll(
+"[data-remove-player]"
+)
+.forEach(button => {
+
+button.addEventListener(
+"click",
+() => {
+
+removeLeaderboardEntry(
+button.dataset.removePlayer
+);
+
+}
+);
+
+});
+
+}
 
 
 /* =====================================================
-   LOGOUT
-   ===================================================== */
+REMOVE LEADERBOARD ENTRY
+===================================================== */
 
-document
-    .getElementById("adminLogout")
-    .addEventListener("click", () => {
+async function removeLeaderboardEntry(id) {
 
-        isAdmin = false;
+if(!isAdmin) return;
 
-        document.getElementById(
-            "adminPassword"
-        ).value = "";
 
-        showScreen("nameScreen");
+const confirmed =
+confirm(
+"Remove this player from the leaderboard?"
+);
 
-    });
+
+if(!confirmed) return;
+
+
+try {
+
+const {
+error
+} =
+await supabase
+.from("leaderboard")
+.delete()
+.eq("id",id);
+
+
+if(error) {
+    throw error;
+}
+
+
+await loadAdminLeaderboard();
+
+}
+catch(error) {
+
+console.error(error);
+
+alert(
+"Could not remove player: " +
+(error.message ||
+"Unknown error")
+);
+
+}
+
+}
 
 
 /* =====================================================
-   INITIAL STATE
-   ===================================================== */
+REFRESH ADMIN
+===================================================== */
+
+document
+.getElementById(
+"refreshLibrary"
+)
+.addEventListener(
+"click",
+() => {
+
+loadAdminLibrary();
+
+loadAdminLeaderboard();
+
+}
+);
+
+
+/* =====================================================
+LOGOUT
+===================================================== */
+
+document
+.getElementById(
+"adminLogout"
+)
+.addEventListener(
+"click",
+() => {
+
+isAdmin = false;
+
+document.getElementById(
+"adminPassword"
+).value = "";
+
+showScreen(
+"nameScreen"
+);
+
+}
+);
+
+
+/* =====================================================
+INITIAL STATE
+===================================================== */
 
 console.log(
-    "Wildlife Signal Hunt connected to Supabase."
+"Wildlife Signal Hunt connected to Supabase."
 );
 
 </script>
