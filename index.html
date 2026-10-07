@@ -8,571 +8,567 @@
 
 <style>
 :root {
-    --bg: #050805;
-    --panel: #0c120d;
-    --panel2: #111a12;
-    --line: #263529;
-    --green: #a8ff78;
-    --green2: #6cff9b;
-    --text: #f2f7f0;
-    --muted: #91a08f;
-    --danger: #ff7777;
-    --yellow: #ffe66d;
+    --bg:#050805;
+    --panel:#0c120d;
+    --panel2:#111a12;
+    --line:#263529;
+    --green:#a8ff78;
+    --green2:#6cff9b;
+    --text:#f2f7f0;
+    --muted:#91a08f;
+    --danger:#ff7777;
+    --yellow:#ffe66d;
 }
 
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
 body {
-    min-height: 100vh;
+    min-height:100vh;
     background:
-        radial-gradient(circle at 50% -10%, rgba(75,255,120,.10), transparent 35%),
+        radial-gradient(circle at 50% -10%,rgba(75,255,120,.10),transparent 35%),
         var(--bg);
-    color: var(--text);
-    font-family: Arial, Helvetica, sans-serif;
+    color:var(--text);
+    font-family:Arial,Helvetica,sans-serif;
 }
 
-button,
-input,
-select {
-    font: inherit;
+button,input,select {
+    font:inherit;
 }
 
 button {
-    cursor: pointer;
+    cursor:pointer;
 }
 
 button:disabled {
-    opacity: .45;
-    cursor: not-allowed;
-    transform: none !important;
+    opacity:.45;
+    cursor:not-allowed;
+    transform:none !important;
 }
 
 .screen {
-    display: none;
-    min-height: 100vh;
-    padding: 30px 18px;
+    display:none;
+    min-height:100vh;
+    padding:30px 18px;
 }
 
 .screen.active {
-    display: flex;
+    display:flex;
 }
 
 .center {
-    width: 100%;
-    max-width: 650px;
-    margin: auto;
+    width:100%;
+    max-width:650px;
+    margin:auto;
 }
 
 .logo {
-    text-align: center;
-    color: var(--green);
-    font-size: 13px;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    margin-bottom: 18px;
+    text-align:center;
+    color:var(--green);
+    font-size:13px;
+    letter-spacing:5px;
+    text-transform:uppercase;
+    margin-bottom:18px;
 }
 
 h1 {
-    text-align: center;
-    font-size: clamp(38px,8vw,72px);
-    line-height: .95;
-    letter-spacing: -3px;
-    margin-bottom: 16px;
+    text-align:center;
+    font-size:clamp(38px,8vw,72px);
+    line-height:.95;
+    letter-spacing:-3px;
+    margin-bottom:16px;
 }
 
 .subtitle {
-    text-align: center;
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.6;
-    margin-bottom: 35px;
+    text-align:center;
+    color:var(--muted);
+    font-size:15px;
+    line-height:1.6;
+    margin-bottom:35px;
 }
 
 .card {
-    background: linear-gradient(145deg,var(--panel),var(--panel2));
-    border: 1px solid var(--line);
-    border-radius: 22px;
-    padding: 28px;
-    box-shadow: 0 20px 70px rgba(0,0,0,.35);
+    background:linear-gradient(145deg,var(--panel),var(--panel2));
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:28px;
+    box-shadow:0 20px 70px rgba(0,0,0,.35);
 }
 
 label {
-    display: block;
-    color: var(--muted);
-    font-size: 13px;
-    margin-bottom: 8px;
+    display:block;
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:8px;
 }
 
-input,
-select {
-    width: 100%;
-    background: #070b08;
-    color: var(--text);
-    border: 1px solid var(--line);
-    border-radius: 13px;
-    padding: 15px;
-    outline: none;
+input,select {
+    width:100%;
+    background:#070b08;
+    color:var(--text);
+    border:1px solid var(--line);
+    border-radius:13px;
+    padding:15px;
+    outline:none;
 }
 
-input:focus,
-select:focus {
-    border-color: var(--green);
+input:focus,select:focus {
+    border-color:var(--green);
 }
 
 .field {
-    margin-bottom: 18px;
+    margin-bottom:18px;
 }
 
 .primary {
-    width: 100%;
-    border: none;
-    background: var(--green);
-    color: #071006;
-    padding: 15px;
-    border-radius: 13px;
-    font-weight: 800;
-    transition: .2s;
+    width:100%;
+    border:none;
+    background:var(--green);
+    color:#071006;
+    padding:15px;
+    border-radius:13px;
+    font-weight:800;
+    transition:.2s;
 }
 
 .primary:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.08);
+    transform:translateY(-2px);
+    filter:brightness(1.08);
 }
 
 .secondary {
-    border: 1px solid var(--line);
-    background: transparent;
-    color: var(--text);
-    padding: 12px 16px;
-    border-radius: 12px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--text);
+    padding:12px 16px;
+    border-radius:12px;
 }
 
 .danger {
-    border: 1px solid rgba(255,119,119,.3);
-    background: rgba(255,119,119,.08);
-    color: var(--danger);
-    padding: 10px 13px;
-    border-radius: 10px;
+    border:1px solid rgba(255,119,119,.3);
+    background:rgba(255,119,119,.08);
+    color:var(--danger);
+    padding:10px 13px;
+    border-radius:10px;
 }
 
 .message {
-    min-height: 22px;
-    text-align: center;
-    margin-top: 14px;
-    color: var(--danger);
-    font-size: 14px;
+    min-height:22px;
+    text-align:center;
+    margin-top:14px;
+    color:var(--danger);
+    font-size:14px;
 }
 
 .hidden {
-    display: none !important;
+    display:none !important;
 }
 
 /* GAME */
 
 .game-wrap {
-    width: 100%;
-    max-width: 900px;
-    margin: auto;
+    width:100%;
+    max-width:900px;
+    margin:auto;
 }
 
 .topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:25px;
 }
 
 .tier {
-    color: var(--green);
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: 3px;
-    text-transform: uppercase;
+    color:var(--green);
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:3px;
+    text-transform:uppercase;
 }
 
 .score {
-    background: var(--panel);
-    border: 1px solid var(--line);
-    padding: 10px 15px;
-    border-radius: 12px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    padding:10px 15px;
+    border-radius:12px;
 }
 
 .points-label {
-    text-align: center;
-    color: var(--muted);
-    font-size: 12px;
-    margin-bottom: 15px;
-    letter-spacing: 1px;
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    margin-bottom:15px;
+    letter-spacing:1px;
 }
 
 .progress {
-    height: 5px;
-    background: #172018;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 30px;
+    height:5px;
+    background:#172018;
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:30px;
 }
 
 .progress-fill {
-    height: 100%;
-    width: 0%;
-    background: var(--green);
-    transition: width .3s;
+    height:100%;
+    width:0%;
+    background:var(--green);
+    transition:width .3s;
 }
 
 .game-card {
-    background: linear-gradient(145deg,#0c130d,#111a12);
-    border: 1px solid var(--line);
-    border-radius: 25px;
-    padding: clamp(22px,5vw,45px);
+    background:linear-gradient(145deg,#0c130d,#111a12);
+    border:1px solid var(--line);
+    border-radius:25px;
+    padding:clamp(22px,5vw,45px);
 }
 
 .signal-number {
-    color: var(--muted);
-    font-size: 13px;
-    margin-bottom: 30px;
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:30px;
 }
 
 .sound-button {
-    width: 145px;
-    height: 145px;
-    border-radius: 50%;
-    border: 2px solid var(--green);
-    background: rgba(168,255,120,.07);
-    color: var(--green);
-    display: block;
-    margin: 0 auto 35px;
-    font-size: 46px;
-    transition: .25s;
+    width:145px;
+    height:145px;
+    border-radius:50%;
+    border:2px solid var(--green);
+    background:rgba(168,255,120,.07);
+    color:var(--green);
+    display:block;
+    margin:0 auto 35px;
+    font-size:46px;
+    transition:.25s;
 }
 
 .sound-button:hover {
-    transform: scale(1.05);
-    background: rgba(168,255,120,.13);
+    transform:scale(1.05);
+    background:rgba(168,255,120,.13);
 }
 
 .sound-status {
-    text-align: center;
-    color: var(--muted);
-    margin-bottom: 25px;
+    text-align:center;
+    color:var(--muted);
+    margin-bottom:25px;
 }
 
 .answer-row {
-    display: flex;
-    gap: 10px;
+    display:flex;
+    gap:10px;
 }
 
 .answer-row input {
-    flex: 1;
+    flex:1;
 }
 
 .answer-row button {
-    width: 130px;
+    width:130px;
 }
 
 .health {
-    text-align: center;
-    font-size: 23px;
-    letter-spacing: 5px;
-    margin: 20px 0;
+    text-align:center;
+    font-size:23px;
+    letter-spacing:5px;
+    margin:20px 0;
 }
 
 .feedback {
-    text-align: center;
-    min-height: 25px;
-    font-weight: 700;
-    margin-top: 12px;
+    text-align:center;
+    min-height:25px;
+    font-weight:700;
+    margin-top:12px;
 }
 
 .feedback.correct {
-    color: var(--green2);
+    color:var(--green2);
 }
 
 .feedback.wrong {
-    color: var(--danger);
+    color:var(--danger);
 }
 
 .feedback.reveal {
-    color: var(--yellow);
-    font-size: 17px;
+    color:var(--yellow);
+    font-size:17px;
 }
 
 /* TRANSITION */
 
 .transition {
-    text-align: center;
+    text-align:center;
 }
 
 .transition .big {
-    font-size: 65px;
-    margin-bottom: 15px;
+    font-size:65px;
+    margin-bottom:15px;
 }
 
 .transition h2 {
-    font-size: 38px;
-    margin-bottom: 12px;
+    font-size:38px;
+    margin-bottom:12px;
 }
 
 .transition p {
-    color: var(--muted);
-    margin-bottom: 28px;
+    color:var(--muted);
+    margin-bottom:28px;
 }
 
 /* LEADERBOARD */
 
 .leaderboard-wrap {
-    width: 100%;
-    max-width: 850px;
-    margin: auto;
+    width:100%;
+    max-width:850px;
+    margin:auto;
 }
 
 .leaderboard-title {
-    text-align: center;
-    font-size: clamp(35px,7vw,58px);
-    letter-spacing: -2px;
-    margin-bottom: 10px;
+    text-align:center;
+    font-size:clamp(35px,7vw,58px);
+    letter-spacing:-2px;
+    margin-bottom:10px;
 }
 
 .leaderboard-subtitle {
-    text-align: center;
-    color: var(--muted);
-    margin-bottom: 30px;
+    text-align:center;
+    color:var(--muted);
+    margin-bottom:30px;
 }
 
 .leaderboard-card {
-    background: linear-gradient(145deg,var(--panel),var(--panel2));
-    border: 1px solid var(--line);
-    border-radius: 22px;
-    overflow: hidden;
+    background:linear-gradient(145deg,var(--panel),var(--panel2));
+    border:1px solid var(--line);
+    border-radius:22px;
+    overflow:hidden;
 }
 
 .leader-row {
-    display: grid;
-    grid-template-columns: 70px 1fr 100px 170px;
-    align-items: center;
-    gap: 15px;
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--line);
+    display:grid;
+    grid-template-columns:70px 1fr 100px 170px;
+    align-items:center;
+    gap:15px;
+    padding:16px 20px;
+    border-bottom:1px solid var(--line);
 }
 
 .leader-row:last-child {
-    border-bottom: none;
+    border-bottom:none;
 }
 
 .leader-rank {
-    font-size: 22px;
-    font-weight: 900;
+    font-size:22px;
+    font-weight:900;
 }
 
 .leader-name {
-    font-weight: 700;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-weight:700;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
 .leader-score {
-    text-align: right;
-    color: var(--green);
-    font-weight: 900;
+    text-align:right;
+    color:var(--green);
+    font-weight:900;
 }
 
 .leader-date {
-    text-align: right;
-    color: var(--muted);
-    font-size: 12px;
+    text-align:right;
+    color:var(--muted);
+    font-size:12px;
 }
 
 .top-one {
-    background: rgba(255,230,109,.05);
+    background:rgba(255,230,109,.05);
 }
 
 .top-two {
-    background: rgba(255,255,255,.025);
+    background:rgba(255,255,255,.025);
 }
 
 .top-three {
-    background: rgba(168,255,120,.035);
+    background:rgba(168,255,120,.035);
 }
 
 .leaderboard-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 18px;
+    display:flex;
+    gap:10px;
+    margin-top:18px;
 }
 
 .leaderboard-buttons button {
-    flex: 1;
+    flex:1;
 }
 
 /* ADMIN */
 
 .admin-wrap {
-    width: 100%;
-    max-width: 1100px;
-    margin: auto;
+    width:100%;
+    max-width:1100px;
+    margin:auto;
 }
 
 .admin-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:25px;
 }
 
 .admin-header h2 {
-    font-size: 30px;
+    font-size:30px;
 }
 
 .stats {
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 12px;
-    margin-bottom: 20px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:20px;
 }
 
 .stat {
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 18px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:18px;
 }
 
 .stat small {
-    display: block;
-    color: var(--muted);
-    margin-bottom: 8px;
+    display:block;
+    color:var(--muted);
+    margin-bottom:8px;
 }
 
 .stat strong {
-    font-size: 28px;
+    font-size:28px;
 }
 
 .admin-grid {
-    display: grid;
-    grid-template-columns: 360px 1fr;
-    gap: 18px;
+    display:grid;
+    grid-template-columns:360px 1fr;
+    gap:18px;
 }
 
 .library {
-    min-height: 300px;
+    min-height:300px;
 }
 
 .library-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
 }
 
 .signal-list {
-    display: grid;
-    gap: 10px;
+    display:grid;
+    gap:10px;
 }
 
 .signal-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    background: #080e09;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 13px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    background:#080e09;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:13px;
 }
 
 .signal-info {
-    min-width: 0;
+    min-width:0;
 }
 
 .signal-name {
-    font-weight: 700;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-weight:700;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
 .signal-difficulty {
-    font-size: 11px;
-    color: var(--green);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-top: 4px;
+    font-size:11px;
+    color:var(--green);
+    letter-spacing:1px;
+    text-transform:uppercase;
+    margin-top:4px;
 }
 
 .signal-actions {
-    display: flex;
-    gap: 7px;
+    display:flex;
+    gap:7px;
 }
 
 .play-small {
-    border: 1px solid var(--line);
-    background: transparent;
-    color: var(--green);
-    border-radius: 9px;
-    padding: 8px 10px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--green);
+    border-radius:9px;
+    padding:8px 10px;
 }
 
 .empty {
-    text-align: center;
-    color: var(--muted);
-    padding: 45px 15px;
+    text-align:center;
+    color:var(--muted);
+    padding:45px 15px;
 }
 
 .loading {
-    text-align: center;
-    color: var(--muted);
-    padding: 30px;
+    text-align:center;
+    color:var(--muted);
+    padding:30px;
 }
 
 .file-name {
-    display: block;
-    color: var(--muted);
-    font-size: 12px;
-    margin-top: 8px;
-    word-break: break-all;
+    display:block;
+    color:var(--muted);
+    font-size:12px;
+    margin-top:8px;
+    word-break:break-all;
 }
 
 .upload-progress {
-    margin-top: 12px;
-    color: var(--green);
-    font-size: 13px;
+    margin-top:12px;
+    color:var(--green);
+    font-size:13px;
 }
 
 .admin-section {
-    margin-top: 18px;
+    margin-top:18px;
 }
 
 .admin-section h3 {
-    margin-bottom: 15px;
+    margin-bottom:15px;
 }
 
 .admin-leaderboard-list {
-    display: grid;
-    gap: 10px;
+    display:grid;
+    gap:10px;
 }
 
 .admin-leader-row {
-    display: grid;
-    grid-template-columns: 55px 1fr 90px 90px;
-    gap: 10px;
-    align-items: center;
-    background: #080e09;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 12px;
+    display:grid;
+    grid-template-columns:55px 1fr 90px 90px;
+    gap:10px;
+    align-items:center;
+    background:#080e09;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:12px;
 }
 
 .admin-leader-score {
-    text-align: right;
-    color: var(--green);
-    font-weight: 900;
+    text-align:right;
+    color:var(--green);
+    font-weight:900;
 }
 
 /* RESPONSIVE */
@@ -580,69 +576,69 @@ select:focus {
 @media(max-width:800px) {
 
     .admin-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns:1fr;
     }
 
     .stats {
-        grid-template-columns: repeat(2,1fr);
+        grid-template-columns:repeat(2,1fr);
     }
 
     .leader-row {
-        grid-template-columns: 55px 1fr 80px;
+        grid-template-columns:55px 1fr 80px;
     }
 
     .leader-date {
-        display: none;
+        display:none;
     }
 
     .admin-leader-row {
-        grid-template-columns: 45px 1fr 70px 80px;
+        grid-template-columns:45px 1fr 70px 80px;
     }
 }
 
 @media(max-width:550px) {
 
     .screen {
-        padding: 18px 12px;
+        padding:18px 12px;
     }
 
     .card {
-        padding: 22px;
+        padding:22px;
     }
 
     .answer-row {
-        flex-direction: column;
+        flex-direction:column;
     }
 
     .answer-row button {
-        width: 100%;
+        width:100%;
     }
 
     .topbar {
-        align-items: flex-start;
+        align-items:flex-start;
     }
 
     .stats {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns:1fr 1fr;
     }
 
     .admin-header {
-        align-items: flex-start;
-        flex-direction: column;
+        align-items:flex-start;
+        flex-direction:column;
     }
 
     .leader-row {
-        grid-template-columns: 45px 1fr 70px;
-        padding: 14px;
+        grid-template-columns:45px 1fr 70px;
+        padding:14px;
     }
 
     .leader-score {
-        font-size: 14px;
+        font-size:14px;
     }
 
     .admin-leader-row {
-        grid-template-columns: 35px 1fr 60px 70px;
-        font-size: 13px;
+        grid-template-columns:35px 1fr 60px 70px;
+        font-size:13px;
     }
 }
 </style>
@@ -653,7 +649,6 @@ select:focus {
 <!-- NAME -->
 
 <section id="nameScreen" class="screen active">
-
 <div class="center">
 
 <div class="logo">
@@ -672,10 +667,7 @@ Identify the signal. Survive all three tiers.
 <div class="card">
 
 <div class="field">
-
-<label for="playerName">
-YOUR NAME
-</label>
+<label for="playerName">YOUR NAME</label>
 
 <input
 id="playerName"
@@ -694,16 +686,13 @@ ENTER THE HUNT →
 <div id="nameMessage" class="message"></div>
 
 </div>
-
 </div>
-
 </section>
 
 
 <!-- ADMIN PASSWORD -->
 
 <section id="adminPasswordScreen" class="screen">
-
 <div class="center">
 
 <div class="logo">
@@ -759,9 +748,7 @@ style="width:100%;margin-top:10px;"
 <div id="adminLoginMessage" class="message"></div>
 
 </div>
-
 </div>
-
 </section>
 
 
@@ -779,18 +766,13 @@ style="width:100%;margin-top:10px;"
 EASY
 </div>
 
-<div
-id="playerDisplay"
-style="margin-top:5px;"
-></div>
+<div id="playerDisplay" style="margin-top:5px;"></div>
 
 </div>
 
 <div class="score">
-
 SCORE:
 <strong id="scoreDisplay">0</strong>
-
 </div>
 
 </div>
@@ -803,12 +785,7 @@ THIS TIER: +1 POINT PER CORRECT ANSWER
 </div>
 
 <div class="progress">
-
-<div
-id="progressFill"
-class="progress-fill"
-></div>
-
+<div id="progressFill" class="progress-fill"></div>
 </div>
 
 <div class="game-card">
@@ -847,6 +824,8 @@ id="healthDisplay"
 id="answerInput"
 type="text"
 autocomplete="off"
+autocapitalize="none"
+spellcheck="false"
 placeholder="What animal is this?"
 >
 
@@ -865,9 +844,7 @@ class="feedback"
 ></div>
 
 </div>
-
 </div>
-
 </section>
 
 
@@ -894,17 +871,12 @@ Easy Complete
 You've cleared the first tier.
 </p>
 
-<button
-class="primary"
-id="continueButton"
->
+<button class="primary" id="continueButton">
 CONTINUE →
 </button>
 
 </div>
-
 </div>
-
 </section>
 
 
@@ -959,9 +931,7 @@ PLAY AGAIN
 </button>
 
 </div>
-
 </div>
-
 </section>
 
 
@@ -1010,9 +980,7 @@ PLAY AGAIN →
 </button>
 
 </div>
-
 </div>
-
 </section>
 
 
@@ -1074,8 +1042,6 @@ LOG OUT
 
 <div class="admin-grid">
 
-<!-- ADD SIGNAL -->
-
 <div class="card">
 
 <h3 style="margin-bottom:20px;">
@@ -1091,7 +1057,7 @@ ANIMAL / WILDLIFE NAME
 <input
 id="animalName"
 type="text"
-placeholder="Example: Tiger"
+placeholder="Example: Tiger, Bengal Tiger"
 maxlength="80"
 >
 
@@ -1105,17 +1071,9 @@ DIFFICULTY
 
 <select id="difficulty">
 
-<option value="easy">
-Easy
-</option>
-
-<option value="medium">
-Medium
-</option>
-
-<option value="hard">
-Hard
-</option>
+<option value="easy">Easy</option>
+<option value="medium">Medium</option>
+<option value="hard">Hard</option>
 
 </select>
 
@@ -1155,8 +1113,6 @@ class="upload-progress"
 </div>
 
 
-<!-- LIBRARY -->
-
 <div class="card library">
 
 <div class="library-header">
@@ -1190,8 +1146,6 @@ Loading library...
 </div>
 
 
-<!-- ADMIN LEADERBOARD -->
-
 <div class="card admin-section">
 
 <h3>
@@ -1218,7 +1172,6 @@ Loading leaderboard...
 </div>
 
 </div>
-
 </section>
 
 
@@ -1236,14 +1189,11 @@ import {
 }
 from "https://esm.sh/@supabase/supabase-js@2";
 
-
 const SUPABASE_URL =
 "https://hqjlrtvyuvfjxdvqtxoq.supabase.co";
 
-
 const SUPABASE_KEY =
 "sb_publishable_UBbCJWtTXQBfz2-BHOUM5w_IyaclsWd";
-
 
 const supabase =
 createClient(
@@ -1257,22 +1207,29 @@ GAME STATE
 ===================================================== */
 
 let playerName = "";
-
 let score = 0;
-
 let currentDifficulty = "easy";
-
 let currentSignals = [];
-
 let currentIndex = 0;
-
 let health = 3;
-
 let currentSignal = null;
-
 let isAdmin = false;
-
 let gameSaved = false;
+
+/*
+IMPORTANT:
+
+We DO NOT disable the answer input anymore.
+
+This prevents the Medium-level keyboard/input bug.
+
+Instead, this variable controls whether a submission
+is currently allowed.
+*/
+
+let answerLocked = false;
+
+let signalTimer = null;
 
 
 /* =====================================================
@@ -1287,9 +1244,12 @@ document
     screen.classList.remove("active");
 });
 
-document
-.getElementById(id)
-.classList.add("active");
+const target =
+document.getElementById(id);
+
+if(target) {
+    target.classList.add("active");
+}
 
 }
 
@@ -1310,7 +1270,7 @@ function shuffle(array) {
 
 const copy = [...array];
 
-for (
+for(
 let i = copy.length - 1;
 i > 0;
 i--
@@ -1337,8 +1297,22 @@ return copy;
 }
 
 
+function getPointsForDifficulty(difficulty) {
+
+if(difficulty === "easy") return 1;
+if(difficulty === "medium") return 2;
+if(difficulty === "hard") return 3;
+
+return 1;
+
+}
+
+
 /* =====================================================
-RESET GAME CONTROLS
+RESET CONTROLS
+
+NOTICE:
+The answer input is intentionally NEVER disabled.
 ===================================================== */
 
 function resetGameControls() {
@@ -1352,18 +1326,23 @@ document.getElementById("submitAnswer");
 const playButton =
 document.getElementById("playSoundButton");
 
+answerLocked = false;
+
 answerInput.disabled = false;
+answerInput.readOnly = false;
 
 submitButton.disabled = false;
-
 playButton.disabled = false;
 
 answerInput.value = "";
 
-document.getElementById("feedback").textContent = "";
+document.getElementById(
+"feedback"
+).textContent = "";
 
-document.getElementById("feedback").className =
-"feedback";
+document.getElementById(
+"feedback"
+).className = "feedback";
 
 }
 
@@ -1390,6 +1369,7 @@ playerNameInput
 event => {
 
 if(event.key === "Enter") {
+    event.preventDefault();
     startEntry();
 }
 
@@ -1423,16 +1403,13 @@ document.getElementById(
 "nameMessage"
 ).textContent = "";
 
-
 document.getElementById(
 "adminPassword"
 ).value = "";
 
-
 showScreen(
 "adminPasswordScreen"
 );
-
 
 setTimeout(() => {
 
@@ -1448,33 +1425,24 @@ return;
 
 
 playerName = name;
-
 score = 0;
-
 currentDifficulty = "easy";
-
 currentSignals = [];
-
 currentIndex = 0;
-
 currentSignal = null;
-
 health = 3;
-
 gameSaved = false;
-
+answerLocked = false;
 
 document.getElementById(
 "playerDisplay"
 ).textContent =
 playerName;
 
-
 document.getElementById(
 "scoreDisplay"
 ).textContent =
 score;
-
 
 startDifficulty("easy");
 
@@ -1486,6 +1454,11 @@ LOAD SIGNALS
 ===================================================== */
 
 async function loadSignals(difficulty) {
+
+console.log(
+"Loading signals for:",
+difficulty
+);
 
 const {
 data,
@@ -1499,14 +1472,20 @@ await supabase
 
 if(error) {
 
-console.error(error);
-
-throw new Error(
-"Could not load signals."
+console.error(
+"SUPABASE SIGNAL ERROR:",
+error
 );
+
+throw error;
 
 }
 
+
+console.log(
+"Signals loaded:",
+data
+);
 
 return data || [];
 
@@ -1521,22 +1500,35 @@ async function startDifficulty(difficulty) {
 
 try {
 
-currentDifficulty =
-difficulty;
-
+currentDifficulty = difficulty;
 currentIndex = 0;
-
 currentSignal = null;
 
 resetGameControls();
 
 
+/*
+Load ONLY this difficulty.
+
+Example:
+
+easy -> only easy
+
+medium -> only medium
+
+hard -> only hard
+*/
+
 const signals =
 await loadSignals(difficulty);
 
 
-showScreen("gameScreen");
+/*
+Always switch to game screen after
+the database request completes.
+*/
 
+showScreen("gameScreen");
 
 document.getElementById(
 "gameTier"
@@ -1547,40 +1539,51 @@ difficulty.toUpperCase();
 const points =
 getPointsForDifficulty(difficulty);
 
-
 document.getElementById(
 "pointsLabel"
 ).textContent =
 `THIS TIER: +${points} POINT${points === 1 ? "" : "S"} PER CORRECT ANSWER`;
 
 
-if(signals.length === 0) {
+/*
+If admin hasn't added signals yet.
+*/
+
+if(!signals.length) {
+
+currentSignals = [];
+currentSignal = null;
 
 document.getElementById(
 "signalNumber"
 ).textContent =
 "NO SIGNALS AVAILABLE";
 
-
 document.getElementById(
 "soundStatus"
 ).textContent =
-"The admin has not added any signals to this tier yet.";
-
+`No ${difficulty} signals have been added yet.`;
 
 document.getElementById(
 "playSoundButton"
 ).disabled = true;
 
-
 document.getElementById(
 "submitAnswer"
 ).disabled = true;
 
+/*
+IMPORTANT:
+Even in this case we do NOT disable the input.
+*/
 
 document.getElementById(
 "answerInput"
-).disabled = true;
+).disabled = false;
+
+document.getElementById(
+"answerInput"
+).readOnly = false;
 
 return;
 
@@ -1590,6 +1593,7 @@ return;
 currentSignals =
 shuffle(signals);
 
+currentIndex = 0;
 
 loadCurrentSignal();
 
@@ -1597,10 +1601,26 @@ loadCurrentSignal();
 
 catch(error) {
 
-console.error(error);
+console.error(
+"START DIFFICULTY ERROR:",
+error
+);
+
+
+/*
+Show the REAL error instead of hiding it.
+*/
+
+const message =
+error?.message ||
+error?.details ||
+error?.hint ||
+"Unknown Supabase error";
 
 alert(
-"Could not connect to the Wildlife Signal Hunt server."
+"Wildlife Signal Hunt could not load the signals.\n\n" +
+"Supabase error:\n" +
+message
 );
 
 }
@@ -1619,11 +1639,18 @@ if(!currentSignals.length) {
 }
 
 
+if(signalTimer) {
+    clearTimeout(signalTimer);
+    signalTimer = null;
+}
+
+
 currentSignal =
 currentSignals[currentIndex];
 
-
 health = 3;
+
+answerLocked = false;
 
 
 const points =
@@ -1656,15 +1683,24 @@ document.getElementById(
 score;
 
 
-document.getElementById(
-"answerInput"
-).value = "";
+const input =
+document.getElementById("answerInput");
+
+
+/*
+THE IMPORTANT PART.
+
+The input is ALWAYS enabled and writable.
+*/
+
+input.disabled = false;
+input.readOnly = false;
+input.value = "";
 
 
 document.getElementById(
 "feedback"
 ).textContent = "";
-
 
 document.getElementById(
 "feedback"
@@ -1678,20 +1714,6 @@ document.getElementById(
 "Press the button to listen";
 
 
-updateHealth();
-
-updateProgress();
-
-
-/* IMPORTANT:
-   Every new signal unlocks every control.
-*/
-
-document.getElementById(
-"answerInput"
-).disabled = false;
-
-
 document.getElementById(
 "submitAnswer"
 ).disabled = false;
@@ -1702,39 +1724,29 @@ document.getElementById(
 ).disabled = false;
 
 
+updateHealth();
+updateProgress();
+
+
+/*
+Focus after the DOM has updated.
+*/
+
 setTimeout(() => {
 
-const input =
+const activeInput =
 document.getElementById("answerInput");
 
-if(!input.disabled) {
-    input.focus();
+if(activeInput) {
+
+activeInput.disabled = false;
+activeInput.readOnly = false;
+
+activeInput.focus();
+
 }
 
-},100);
-
-}
-
-
-/* =====================================================
-POINT SYSTEM
-===================================================== */
-
-function getPointsForDifficulty(difficulty) {
-
-if(difficulty === "easy") {
-    return 1;
-}
-
-if(difficulty === "medium") {
-    return 2;
-}
-
-if(difficulty === "hard") {
-    return 3;
-}
-
-return 1;
+},150);
 
 }
 
@@ -1747,7 +1759,7 @@ function updateHealth() {
 
 let output = "";
 
-for(let i = 0;i < 3;i++) {
+for(let i = 0; i < 3; i++) {
 
 output +=
 i < health
@@ -1781,13 +1793,11 @@ return;
 
 }
 
-
 const percentage =
 (
-(currentIndex) /
+currentIndex /
 currentSignals.length
 ) * 100;
-
 
 document.getElementById(
 "progressFill"
@@ -1813,7 +1823,6 @@ async function playCurrentSound() {
 
 if(!currentSignal) return;
 
-
 if(
 document.getElementById(
 "playSoundButton"
@@ -1822,31 +1831,24 @@ document.getElementById(
     return;
 }
 
-
 const audio =
 document.getElementById(
 "audioPlayer"
 );
 
-
 audio.pause();
-
 audio.currentTime = 0;
-
 audio.src =
 currentSignal.audio_url;
-
 
 try {
 
 await audio.play();
 
-
 document.getElementById(
 "soundStatus"
 ).textContent =
 "Playing signal...";
-
 
 audio.onended = () => {
 
@@ -1861,7 +1863,10 @@ document.getElementById(
 
 catch(error) {
 
-console.error(error);
+console.error(
+"AUDIO ERROR:",
+error
+);
 
 document.getElementById(
 "soundStatus"
@@ -1905,7 +1910,7 @@ submitAnswer();
 
 function normalizeAnswer(value) {
 
-return value
+return String(value)
 .trim()
 .toLowerCase()
 .replace(/\s+/g," ");
@@ -1918,13 +1923,12 @@ function submitAnswer() {
 if(!currentSignal) return;
 
 
-const submitButton =
-document.getElementById(
-"submitAnswer"
-);
+/*
+Instead of disabling the input,
+we use answerLocked.
+*/
 
-
-if(submitButton.disabled) {
+if(answerLocked) {
     return;
 }
 
@@ -1935,12 +1939,10 @@ document.getElementById(
 );
 
 
-const input =
-inputElement.value;
-
-
 const answer =
-normalizeAnswer(input);
+normalizeAnswer(
+inputElement.value
+);
 
 
 if(!answer) {
@@ -1957,8 +1959,20 @@ return;
 }
 
 
+/*
+Accepted examples:
+
+Tiger
+
+Tiger, Bengal Tiger
+
+Tiger / Bengal Tiger
+
+Tiger | Bengal Tiger
+*/
+
 const acceptedAnswers =
-currentSignal.animal_name
+String(currentSignal.animal_name)
 .split(/[,/|]/)
 .map(normalizeAnswer)
 .filter(Boolean);
@@ -1975,15 +1989,12 @@ getPointsForDifficulty(
 currentDifficulty
 );
 
-
 score += points;
-
 
 document.getElementById(
 "scoreDisplay"
 ).textContent =
 score;
-
 
 showFeedback(
 `✓ CORRECT! +${points} POINT${points === 1 ? "" : "S"}`,
@@ -1991,22 +2002,42 @@ showFeedback(
 );
 
 
-lockAnswerControls();
+/*
+Lock SUBMISSION, not the text box.
+*/
+
+answerLocked = true;
+
+document.getElementById(
+"submitAnswer"
+).disabled = true;
+
+document.getElementById(
+"playSoundButton"
+).disabled = true;
 
 
+/*
+User can technically type while the
+success message is visible, but the
+submission is locked. That's intentional.
+*/
+
+signalTimer =
 setTimeout(() => {
 
 completeSignal();
 
 },700);
 
-
 return;
 
 }
 
 
-/* WRONG */
+/* =====================================================
+WRONG ANSWER
+===================================================== */
 
 health--;
 
@@ -2020,7 +2051,7 @@ showFeedback(
 "wrong"
 );
 
-
+inputElement.focus();
 inputElement.select();
 
 return;
@@ -2029,11 +2060,11 @@ return;
 
 
 /* =====================================================
-ZERO HEALTH = REVEAL ANSWER
+ZERO HEALTH
 ===================================================== */
 
 const correctAnswer =
-currentSignal.animal_name
+String(currentSignal.animal_name)
 .split(/[,/|]/)[0]
 .trim();
 
@@ -2050,9 +2081,23 @@ document.getElementById(
 "Signal completed without points.";
 
 
-lockAnswerControls();
+answerLocked = true;
 
 
+/*
+Again: don't disable the answer input.
+*/
+
+document.getElementById(
+"submitAnswer"
+).disabled = true;
+
+document.getElementById(
+"playSoundButton"
+).disabled = true;
+
+
+signalTimer =
 setTimeout(() => {
 
 completeSignal();
@@ -2073,36 +2118,11 @@ document.getElementById(
 "feedback"
 );
 
-
 feedback.textContent =
 text;
 
-
 feedback.className =
 `feedback ${type}`;
-
-}
-
-
-/* =====================================================
-LOCK CONTROLS
-===================================================== */
-
-function lockAnswerControls() {
-
-document.getElementById(
-"submitAnswer"
-).disabled = true;
-
-
-document.getElementById(
-"answerInput"
-).disabled = true;
-
-
-document.getElementById(
-"playSoundButton"
-).disabled = true;
 
 }
 
@@ -2112,6 +2132,15 @@ COMPLETE SIGNAL
 ===================================================== */
 
 function completeSignal() {
+
+if(signalTimer) {
+
+clearTimeout(signalTimer);
+
+signalTimer = null;
+
+}
+
 
 currentIndex++;
 
@@ -2128,7 +2157,9 @@ return;
 }
 
 
-/* TIER COMPLETE */
+/* =====================================================
+TIER COMPLETE
+===================================================== */
 
 if(currentDifficulty === "easy") {
 
@@ -2181,18 +2212,17 @@ text
 nextDifficulty =
 next.toLowerCase();
 
+answerLocked = true;
 
 document.getElementById(
 "transitionTitle"
 ).textContent =
 title;
 
-
 document.getElementById(
 "transitionText"
 ).textContent =
 text;
-
 
 document.getElementById(
 "transitionEmoji"
@@ -2201,12 +2231,10 @@ next === "MEDIUM"
 ? "Ⅱ"
 : "Ⅲ";
 
-
 document.getElementById(
 "continueButton"
 ).textContent =
 `ENTER ${next} →`;
-
 
 showScreen(
 "transitionScreen"
@@ -2241,9 +2269,7 @@ if(gameSaved) {
     return;
 }
 
-
 gameSaved = true;
-
 
 try {
 
@@ -2253,15 +2279,14 @@ error
 await supabase
 .from("leaderboard")
 .insert({
-    player_name: playerName,
-    score: score
+    player_name:playerName,
+    score:score
 });
-
 
 if(error) {
 
 console.error(
-"Leaderboard save error:",
+"LEADERBOARD SAVE ERROR:",
 error
 );
 
@@ -2271,7 +2296,7 @@ error
 catch(error) {
 
 console.error(
-"Could not save leaderboard score:",
+"COULD NOT SAVE SCORE:",
 error
 );
 
@@ -2291,19 +2316,14 @@ document.getElementById(
 ).textContent =
 score;
 
-
 document.getElementById(
 "finalPlayer"
 ).textContent =
 playerName;
 
-
 showScreen(
 "completionScreen"
 );
-
-
-/* Save score */
 
 await saveFinalScore();
 
@@ -2321,7 +2341,6 @@ document.getElementById(
 "leaderboardList"
 );
 
-
 list.innerHTML =
 `<div class="loading">
 Loading leaderboard...
@@ -2335,24 +2354,31 @@ error
 await supabase
 .from("leaderboard")
 .select("*")
-.order("score",{
+.order(
+"score",
+{
     ascending:false
-})
-.order("completed_at",{
+}
+)
+.order(
+"completed_at",
+{
     ascending:true
-});
+}
+);
 
 
 if(error) {
 
 console.error(
-"Leaderboard load error:",
+"LEADERBOARD LOAD ERROR:",
 error
 );
 
 list.innerHTML =
 `<div class="empty">
-Could not load leaderboard.
+Could not load leaderboard.<br><br>
+${escapeHTML(error.message || "")}
 </div>`;
 
 return;
@@ -2366,6 +2392,10 @@ data || []
 
 }
 
+
+/* =====================================================
+RENDER LEADERBOARD
+===================================================== */
 
 function renderLeaderboard(entries) {
 
@@ -2390,11 +2420,11 @@ return;
 
 list.innerHTML =
 entries
-.map((entry,index) => {
+.map(
+(entry,index) => {
 
 const rank =
 index + 1;
-
 
 const medal =
 rank === 1
@@ -2459,7 +2489,8 @@ ${date}
 
 `;
 
-})
+}
+)
 .join("");
 
 }
@@ -2497,31 +2528,35 @@ loadLeaderboard
 );
 
 
+/* =====================================================
+RESET GAME
+===================================================== */
+
 function resetToNameScreen() {
 
+if(signalTimer) {
+
+clearTimeout(signalTimer);
+
+signalTimer = null;
+
+}
+
 playerName = "";
-
 score = 0;
-
 currentDifficulty = "easy";
-
 currentSignals = [];
-
 currentIndex = 0;
-
 health = 3;
-
 currentSignal = null;
-
 gameSaved = false;
-
 nextDifficulty = null;
+answerLocked = false;
 
 
 document.getElementById(
 "playerName"
 ).value = "";
-
 
 document.getElementById(
 "nameMessage"
@@ -2547,10 +2582,6 @@ document
 resetToNameScreen
 );
 
-
-/* =====================================================
-RESTART
-===================================================== */
 
 document
 .getElementById(
@@ -2585,7 +2616,11 @@ document
 event => {
 
 if(event.key === "Enter") {
-    adminLogin();
+
+event.preventDefault();
+
+adminLogin();
+
 }
 
 }
@@ -2604,20 +2639,16 @@ if(password === "s1zoo") {
 
 isAdmin = true;
 
-
 document.getElementById(
 "adminLoginMessage"
 ).textContent =
 "";
 
-
 showScreen(
 "adminScreen"
 );
 
-
 loadAdminLibrary();
-
 loadAdminLeaderboard();
 
 return;
@@ -2634,7 +2665,7 @@ document.getElementById(
 
 
 /* =====================================================
-BACK TO PLAYER
+BACK
 ===================================================== */
 
 document
@@ -2649,12 +2680,9 @@ document.getElementById(
 "adminPassword"
 ).value = "";
 
-
 document.getElementById(
 "adminLoginMessage"
-).textContent =
-"";
-
+).textContent = "";
 
 showScreen(
 "nameScreen"
@@ -2680,7 +2708,6 @@ const file =
 document.getElementById(
 "audioFile"
 ).files[0];
-
 
 document.getElementById(
 "selectedFileName"
@@ -2713,12 +2740,10 @@ document.getElementById(
 "animalName"
 ).value.trim();
 
-
 const difficulty =
 document.getElementById(
 "difficulty"
 ).value;
-
 
 const file =
 document.getElementById(
@@ -2767,7 +2792,6 @@ document.getElementById(
 "uploadButton"
 );
 
-
 const progress =
 document.getElementById(
 "uploadProgress"
@@ -2777,7 +2801,6 @@ document.getElementById(
 uploadButton.disabled =
 true;
 
-
 progress.textContent =
 "Uploading audio...";
 
@@ -2785,8 +2808,7 @@ progress.textContent =
 try {
 
 const safeName =
-file.name
-.replace(
+file.name.replace(
 /[^a-zA-Z0-9._-]/g,
 "_"
 );
@@ -2874,11 +2896,9 @@ document.getElementById(
 "animalName"
 ).value = "";
 
-
 document.getElementById(
 "audioFile"
 ).value = "";
-
 
 document.getElementById(
 "selectedFileName"
@@ -2897,12 +2917,15 @@ progress.textContent = "";
 }
 catch(error) {
 
-console.error(error);
+console.error(
+"UPLOAD ERROR:",
+error
+);
 
 progress.textContent = "";
 
 alert(
-"Upload failed: " +
+"Upload failed:\n\n" +
 (error.message ||
 "Unknown error")
 );
@@ -2929,7 +2952,6 @@ document.getElementById(
 "signalList"
 );
 
-
 list.innerHTML =
 `<div class="loading">
 Loading library...
@@ -2953,11 +2975,15 @@ await supabase
 
 if(error) {
 
-console.error(error);
+console.error(
+"ADMIN LIBRARY ERROR:",
+error
+);
 
 list.innerHTML =
 `<div class="empty">
-Could not load signals.
+Could not load signals.<br><br>
+${escapeHTML(error.message || "")}
 </div>`;
 
 return;
@@ -2968,7 +2994,6 @@ return;
 updateStats(
 data || []
 );
-
 
 renderSignalList(
 data || []
@@ -2988,12 +3013,10 @@ signals.filter(
 s => s.difficulty === "easy"
 ).length;
 
-
 const medium =
 signals.filter(
 s => s.difficulty === "medium"
 ).length;
-
 
 const hard =
 signals.filter(
@@ -3006,18 +3029,15 @@ document.getElementById(
 ).textContent =
 signals.length;
 
-
 document.getElementById(
 "easyCount"
 ).textContent =
 easy;
 
-
 document.getElementById(
 "mediumCount"
 ).textContent =
 medium;
-
 
 document.getElementById(
 "hardCount"
@@ -3054,22 +3074,19 @@ return;
 
 list.innerHTML =
 signals
-.map(signal => `
+.map(
+signal => `
 
 <div class="signal-item">
 
 <div class="signal-info">
 
 <div class="signal-name">
-${escapeHTML(
-signal.animal_name
-)}
+${escapeHTML(signal.animal_name)}
 </div>
 
 <div class="signal-difficulty">
-${escapeHTML(
-signal.difficulty
-)}
+${escapeHTML(signal.difficulty)}
 </div>
 
 </div>
@@ -3078,9 +3095,7 @@ signal.difficulty
 
 <button
 class="play-small"
-data-play="${escapeHTML(
-signal.audio_url
-)}"
+data-play="${escapeHTML(signal.audio_url)}"
 >
 ▶
 </button>
@@ -3096,7 +3111,8 @@ data-delete="${signal.id}"
 
 </div>
 
-`)
+`
+)
 .join("");
 
 
@@ -3104,7 +3120,8 @@ list
 .querySelectorAll(
 "[data-play]"
 )
-.forEach(button => {
+.forEach(
+button => {
 
 button.addEventListener(
 "click",
@@ -3117,14 +3134,16 @@ button.dataset.play
 }
 );
 
-});
+}
+);
 
 
 list
 .querySelectorAll(
 "[data-delete]"
 )
-.forEach(button => {
+.forEach(
+button => {
 
 button.addEventListener(
 "click",
@@ -3137,7 +3156,8 @@ button.dataset.delete
 }
 );
 
-});
+}
+);
 
 }
 
@@ -3153,19 +3173,22 @@ document.getElementById(
 "audioPlayer"
 );
 
-
 audio.pause();
 
 audio.currentTime = 0;
 
 audio.src = url;
 
-
 audio
 .play()
 .catch(
 error => {
-console.error(error);
+
+console.error(
+"AUDIO PREVIEW ERROR:",
+error
+);
+
 }
 );
 
@@ -3220,7 +3243,6 @@ await supabase
     signal.audio_path
 ]);
 
-
 if(storageError) {
 
 console.warn(
@@ -3252,10 +3274,13 @@ await loadAdminLibrary();
 }
 catch(error) {
 
-console.error(error);
+console.error(
+"DELETE ERROR:",
+error
+);
 
 alert(
-"Could not delete signal: " +
+"Could not delete signal:\n\n" +
 (error.message ||
 "Unknown error")
 );
@@ -3276,7 +3301,6 @@ document.getElementById(
 "adminLeaderboardList"
 );
 
-
 list.innerHTML =
 `<div class="loading">
 Loading leaderboard...
@@ -3290,21 +3314,31 @@ error
 await supabase
 .from("leaderboard")
 .select("*")
-.order("score",{
+.order(
+"score",
+{
     ascending:false
-})
-.order("completed_at",{
+}
+)
+.order(
+"completed_at",
+{
     ascending:true
-});
+}
+);
 
 
 if(error) {
 
-console.error(error);
+console.error(
+"ADMIN LEADERBOARD ERROR:",
+error
+);
 
 list.innerHTML =
 `<div class="empty">
-Could not load leaderboard.
+Could not load leaderboard.<br><br>
+${escapeHTML(error.message || "")}
 </div>`;
 
 return;
@@ -3318,6 +3352,10 @@ data || []
 
 }
 
+
+/* =====================================================
+RENDER ADMIN LEADERBOARD
+===================================================== */
 
 function renderAdminLeaderboard(entries) {
 
@@ -3341,11 +3379,11 @@ return;
 
 list.innerHTML =
 entries
-.map((entry,index) => {
+.map(
+(entry,index) => {
 
 const rank =
 index + 1;
-
 
 return `
 
@@ -3363,9 +3401,7 @@ text-overflow:ellipsis;
 white-space:nowrap;
 "
 >
-${escapeHTML(
-entry.player_name
-)}
+${escapeHTML(entry.player_name)}
 </div>
 
 <div class="admin-leader-score">
@@ -3383,7 +3419,8 @@ REMOVE
 
 `;
 
-})
+}
+)
 .join("");
 
 
@@ -3391,7 +3428,8 @@ list
 .querySelectorAll(
 "[data-remove-player]"
 )
-.forEach(button => {
+.forEach(
+button => {
 
 button.addEventListener(
 "click",
@@ -3404,7 +3442,8 @@ button.dataset.removePlayer
 }
 );
 
-});
+}
+);
 
 }
 
@@ -3448,10 +3487,13 @@ await loadAdminLeaderboard();
 }
 catch(error) {
 
-console.error(error);
+console.error(
+"REMOVE LEADERBOARD ERROR:",
+error
+);
 
 alert(
-"Could not remove player: " +
+"Could not remove player:\n\n" +
 (error.message ||
 "Unknown error")
 );
@@ -3474,7 +3516,6 @@ document
 () => {
 
 loadAdminLibrary();
-
 loadAdminLeaderboard();
 
 }
@@ -3508,11 +3549,16 @@ showScreen(
 
 
 /* =====================================================
-INITIAL STATE
+STARTUP
 ===================================================== */
 
 console.log(
-"Wildlife Signal Hunt connected to Supabase."
+"Wildlife Signal Hunt loaded."
+);
+
+console.log(
+"Supabase:",
+SUPABASE_URL
 );
 
 </script>
