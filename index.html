@@ -574,7 +574,6 @@ input:focus,select:focus {
 /* RESPONSIVE */
 
 @media(max-width:800px) {
-
     .admin-grid {
         grid-template-columns:1fr;
     }
@@ -597,7 +596,6 @@ input:focus,select:focus {
 }
 
 @media(max-width:550px) {
-
     .screen {
         padding:18px 12px;
     }
@@ -1218,6 +1216,7 @@ let currentDifficulty = "easy";
 let currentSignals = [];
 let currentIndex = 0;
 
+let maxHealth = 3;
 let health = 3;
 
 let currentSignal = null;
@@ -1226,33 +1225,9 @@ let isAdmin = false;
 
 let gameSaved = false;
 
-
-/*
-IMPORTANT:
-
-The answer input is NEVER disabled.
-
-answerLocked controls whether the
-current signal accepts a submission.
-*/
-
 let answerLocked = false;
 
-
-/*
-Stores the current delayed timer.
-
-This prevents an old signal from
-changing the game after a tier transition.
-*/
-
 let signalTimer = null;
-
-
-/*
-Used to prevent an old async difficulty
-request from overwriting a newer one.
-*/
 
 let difficultyRequestId = 0;
 
@@ -1266,20 +1241,12 @@ function showScreen(id) {
 document
 .querySelectorAll(".screen")
 .forEach(screen => {
-
     screen.classList.remove("active");
-
 });
 
-
-const target =
-document.getElementById(id);
-
-
+const target = document.getElementById(id);
 if(target) {
-
     target.classList.add("active");
-
 }
 
 }
@@ -1301,32 +1268,28 @@ function shuffle(array) {
 
 const copy = [...array];
 
+for(let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+}
 
-for(
-let i = copy.length - 1;
-i > 0;
-i--
-) {
-
-const j =
-Math.floor(
-Math.random() * (i + 1)
-);
-
-
-[
-copy[i],
-copy[j]
-] =
-[
-copy[j],
-copy[i]
-];
+return copy;
 
 }
 
 
-return copy;
+function getMaxHealthForDifficulty(difficulty) {
+
+if(difficulty === "easy") {
+    return 3;
+}
+if(difficulty === "medium") {
+    return 4;
+}
+if(difficulty === "hard") {
+    return 5;
+}
+return 3;
 
 }
 
@@ -1334,26 +1297,14 @@ return copy;
 function getPointsForDifficulty(difficulty) {
 
 if(difficulty === "easy") {
-
     return 1;
-
 }
-
-
 if(difficulty === "medium") {
-
     return 2;
-
 }
-
-
 if(difficulty === "hard") {
-
     return 3;
-
 }
-
-
 return 1;
 
 }
@@ -1362,11 +1313,8 @@ return 1;
 function clearSignalTimer() {
 
 if(signalTimer) {
-
     clearTimeout(signalTimer);
-
     signalTimer = null;
-
 }
 
 }
@@ -1378,56 +1326,21 @@ RESET CONTROLS
 
 function resetGameControls() {
 
-const answerInput =
-document.getElementById(
-    "answerInput"
-);
-
-
-const submitButton =
-document.getElementById(
-    "submitAnswer"
-);
-
-
-const playButton =
-document.getElementById(
-    "playSoundButton"
-);
-
+const answerInput = document.getElementById("answerInput");
+const submitButton = document.getElementById("submitAnswer");
+const playButton = document.getElementById("playSoundButton");
 
 answerLocked = false;
 
-
-/*
-NEVER disable the input.
-*/
-
 answerInput.disabled = false;
-
 answerInput.readOnly = false;
-
 answerInput.value = "";
 
-
-/*
-These buttons can be locked.
-*/
-
 submitButton.disabled = false;
-
 playButton.disabled = false;
 
-
-document.getElementById(
-    "feedback"
-).textContent = "";
-
-
-document.getElementById(
-    "feedback"
-).className =
-"feedback";
+document.getElementById("feedback").textContent = "";
+document.getElementById("feedback").className = "feedback";
 
 }
 
@@ -1436,131 +1349,60 @@ document.getElementById(
 PLAYER ENTRY
 ===================================================== */
 
-const playerNameInput =
-document.getElementById(
-    "playerName"
-);
+const playerNameInput = document.getElementById("playerName");
 
+document.getElementById("startButton").addEventListener("click", startEntry);
 
-document
-.getElementById("startButton")
-.addEventListener(
-    "click",
-    startEntry
-);
-
-
-playerNameInput
-.addEventListener(
-    "keydown",
-    event => {
-
-        if(event.key === "Enter") {
-
-            event.preventDefault();
-
-            startEntry();
-
-        }
-
+playerNameInput.addEventListener("keydown", event => {
+    if(event.key === "Enter") {
+        event.preventDefault();
+        startEntry();
     }
-);
+});
 
 
 function startEntry() {
 
-const name =
-playerNameInput.value.trim();
-
+const name = playerNameInput.value.trim();
 
 if(!name) {
-
-document.getElementById(
-    "nameMessage"
-).textContent =
-"Enter your name first.";
-
-return;
-
+    document.getElementById("nameMessage").textContent = "Enter your name first.";
+    return;
 }
-
 
 /*
 ZOO opens admin.
 */
-
-if(
-name.toLowerCase() === "zoo"
-) {
-
-document.getElementById(
-    "nameMessage"
-).textContent = "";
-
-
-document.getElementById(
-    "adminPassword"
-).value = "";
-
-
-showScreen(
-    "adminPasswordScreen"
-);
-
-
-setTimeout(() => {
-
-document
-    .getElementById(
-        "adminPassword"
-    )
-    .focus();
-
-},100);
-
-
-return;
-
+if(name.toLowerCase() === "zoo") {
+    document.getElementById("nameMessage").textContent = "";
+    document.getElementById("adminPassword").value = "";
+    showScreen("adminPasswordScreen");
+    setTimeout(() => {
+        document.getElementById("adminPassword").focus();
+    },100);
+    return;
 }
-
 
 /*
 Start a completely new game.
 */
-
 clearSignalTimer();
 
-
 playerName = name;
-
 score = 0;
-
 currentDifficulty = "easy";
-
 currentSignals = [];
-
 currentIndex = 0;
-
 currentSignal = null;
 
-health = 3;
+maxHealth = getMaxHealthForDifficulty("easy");
+health = maxHealth;
 
 gameSaved = false;
-
 answerLocked = false;
 
-
-document.getElementById(
-    "playerDisplay"
-).textContent =
-playerName;
-
-
-document.getElementById(
-    "scoreDisplay"
-).textContent =
-score;
-
+document.getElementById("playerDisplay").textContent = playerName;
+document.getElementById("scoreDisplay").textContent = score;
 
 startDifficulty("easy");
 
@@ -1573,46 +1415,19 @@ LOAD SIGNALS
 
 async function loadSignals(difficulty) {
 
-console.log(
-    "Loading signals for:",
-    difficulty
-);
+console.log("Loading signals for:", difficulty);
 
-
-const {
-    data,
-    error
-} =
-await supabase
+const { data, error } = await supabase
 .from("signals")
 .select("*")
-.eq(
-    "difficulty",
-    difficulty
-);
-
+.eq("difficulty", difficulty);
 
 if(error) {
-
-console.error(
-    "SUPABASE SIGNAL ERROR:",
-    error
-);
-
-
-throw error;
-
+    console.error("SUPABASE SIGNAL ERROR:", error);
+    throw error;
 }
 
-
-console.log(
-    "Signals loaded for",
-    difficulty,
-    ":",
-    data
-);
-
-
+console.log("Signals loaded for", difficulty, ":", data);
 return data || [];
 
 }
@@ -1624,244 +1439,90 @@ START DIFFICULTY
 
 async function startDifficulty(difficulty) {
 
-const requestId =
-++difficultyRequestId;
-
+const requestId = ++difficultyRequestId;
 
 clearSignalTimer();
 
 answerLocked = true;
-
 currentSignal = null;
-
 currentSignals = [];
-
 currentIndex = 0;
 
-
 /*
-Show the game immediately.
-
-This prevents the old transition/game state
-from remaining visible while Medium loads.
+Configure Tier & Health.
+Easy: 3 hearts
+Medium: 4 hearts
+Hard: 5 hearts
 */
+currentDifficulty = difficulty;
+maxHealth = getMaxHealthForDifficulty(difficulty);
+health = maxHealth;
 
 showScreen("gameScreen");
 
+document.getElementById("gameTier").textContent = difficulty.toUpperCase();
 
-document.getElementById(
-    "gameTier"
-).textContent =
-difficulty.toUpperCase();
-
-
-const points =
-getPointsForDifficulty(
-    difficulty
-);
-
-
-document.getElementById(
-    "pointsLabel"
-).textContent =
+const points = getPointsForDifficulty(difficulty);
+document.getElementById("pointsLabel").textContent =
 `THIS TIER: +${points} POINT${points === 1 ? "" : "S"} PER CORRECT ANSWER`;
 
+document.getElementById("signalNumber").textContent = "LOADING SIGNALS...";
+document.getElementById("soundStatus").textContent = `Loading ${difficulty} signals...`;
 
-document.getElementById(
-    "signalNumber"
-).textContent =
-"LOADING SIGNALS...";
-
-
-document.getElementById(
-    "soundStatus"
-).textContent =
-`Loading ${difficulty} signals...`;
-
-
-/*
-Buttons are temporarily unavailable
-while Supabase loads.
-
-The input remains enabled.
-*/
-
-document.getElementById(
-    "answerInput"
-).disabled = false;
-
-
-document.getElementById(
-    "answerInput"
-).readOnly = false;
-
-
-document.getElementById(
-    "submitAnswer"
-).disabled = true;
-
-
-document.getElementById(
-    "playSoundButton"
-).disabled = true;
-
+document.getElementById("answerInput").disabled = false;
+document.getElementById("answerInput").readOnly = false;
+document.getElementById("submitAnswer").disabled = true;
+document.getElementById("playSoundButton").disabled = true;
 
 try {
 
-const signals =
-await loadSignals(
-    difficulty
-);
+const signals = await loadSignals(difficulty);
 
-
-/*
-If the player has already moved to
-another tier, ignore this old request.
-*/
-
-if(
-requestId !== difficultyRequestId
-) {
-
+if(requestId !== difficultyRequestId) {
     return;
-
 }
-
-
-/*
-Store the new tier.
-*/
-
-currentDifficulty =
-difficulty;
-
 
 if(!signals.length) {
+    currentSignals = [];
+    currentSignal = null;
+    answerLocked = true;
 
-currentSignals = [];
-
-currentSignal = null;
-
-answerLocked = true;
-
-
-document.getElementById(
-    "signalNumber"
-).textContent =
-"NO SIGNALS AVAILABLE";
-
-
-document.getElementById(
-    "soundStatus"
-).textContent =
-`No ${difficulty} signals have been added yet.`;
-
-
-document.getElementById(
-    "playSoundButton"
-).disabled = true;
-
-
-document.getElementById(
-    "submitAnswer"
-).disabled = true;
-
-
-/*
-Still keep input typeable.
-*/
-
-document.getElementById(
-    "answerInput"
-).disabled = false;
-
-
-document.getElementById(
-    "answerInput"
-).readOnly = false;
-
-
-return;
-
+    document.getElementById("signalNumber").textContent = "NO SIGNALS AVAILABLE";
+    document.getElementById("soundStatus").textContent = `No ${difficulty} signals have been added yet.`;
+    document.getElementById("playSoundButton").disabled = true;
+    document.getElementById("submitAnswer").disabled = true;
+    document.getElementById("answerInput").disabled = false;
+    document.getElementById("answerInput").readOnly = false;
+    return;
 }
 
-
-/*
-Shuffle this tier independently.
-
-Easy signals do not carry over into Medium.
-Medium signals do not carry over into Hard.
-*/
-
-currentSignals =
-shuffle(signals);
-
-
+currentSignals = shuffle(signals);
 currentIndex = 0;
-
 currentSignal = null;
-
-
-/*
-Load the first signal.
-*/
 
 loadCurrentSignal();
 
 }
 catch(error) {
 
-console.error(
-    "START DIFFICULTY ERROR:",
-    error
-);
+console.error("START DIFFICULTY ERROR:", error);
 
-
-/*
-Only show the error if this is still
-the active request.
-*/
-
-if(
-requestId !== difficultyRequestId
-) {
-
+if(requestId !== difficultyRequestId) {
     return;
-
 }
-
 
 answerLocked = true;
 
-
-document.getElementById(
-    "signalNumber"
-).textContent =
-"COULD NOT LOAD SIGNALS";
-
-
-document.getElementById(
-    "soundStatus"
-).textContent =
-"Check the Supabase connection.";
-
-
-document.getElementById(
-    "submitAnswer"
-).disabled = true;
-
-
-document.getElementById(
-    "playSoundButton"
-).disabled = true;
-
+document.getElementById("signalNumber").textContent = "COULD NOT LOAD SIGNALS";
+document.getElementById("soundStatus").textContent = "Check the Supabase connection.";
+document.getElementById("submitAnswer").disabled = true;
+document.getElementById("playSoundButton").disabled = true;
 
 const message =
 error?.message ||
 error?.details ||
 error?.hint ||
 "Unknown Supabase error";
-
 
 alert(
     `Could not load ${difficulty} signals.\n\n` +
@@ -1881,156 +1542,47 @@ function loadCurrentSignal() {
 
 clearSignalTimer();
 
-
 if(!currentSignals.length) {
-
     return;
-
 }
 
-
-currentSignal =
-currentSignals[currentIndex];
-
-
-health = 3;
-
+currentSignal = currentSignals[currentIndex];
 answerLocked = false;
 
+const points = getPointsForDifficulty(currentDifficulty);
 
-/*
-Tier information.
-*/
-
-const points =
-getPointsForDifficulty(
-    currentDifficulty
-);
-
-
-document.getElementById(
-    "gameTier"
-).textContent =
-currentDifficulty.toUpperCase();
-
-
-document.getElementById(
-    "pointsLabel"
-).textContent =
+document.getElementById("gameTier").textContent = currentDifficulty.toUpperCase();
+document.getElementById("pointsLabel").textContent =
 `THIS TIER: +${points} POINT${points === 1 ? "" : "S"} PER CORRECT ANSWER`;
 
-
-/*
-Signal number.
-*/
-
-document.getElementById(
-    "signalNumber"
-).textContent =
+document.getElementById("signalNumber").textContent =
 `SIGNAL ${currentIndex + 1} / ${currentSignals.length}`;
 
+document.getElementById("scoreDisplay").textContent = score;
 
-/*
-Score.
-*/
-
-document.getElementById(
-    "scoreDisplay"
-).textContent =
-score;
-
-
-/*
-INPUT FIX:
-
-Always force the answer box to be
-enabled and writable.
-*/
-
-const input =
-document.getElementById(
-    "answerInput"
-);
-
-
+const input = document.getElementById("answerInput");
 input.disabled = false;
-
 input.readOnly = false;
-
 input.value = "";
 
+document.getElementById("feedback").textContent = "";
+document.getElementById("feedback").className = "feedback";
 
-/*
-Feedback.
-*/
-
-document.getElementById(
-    "feedback"
-).textContent = "";
-
-
-document.getElementById(
-    "feedback"
-).className =
-"feedback";
-
-
-/*
-Sound.
-*/
-
-document.getElementById(
-    "soundStatus"
-).textContent =
-"Press the button to listen";
-
-
-document.getElementById(
-    "submitAnswer"
-).disabled = false;
-
-
-document.getElementById(
-    "playSoundButton"
-).disabled = false;
-
+document.getElementById("soundStatus").textContent = "Press the button to listen";
+document.getElementById("submitAnswer").disabled = false;
+document.getElementById("playSoundButton").disabled = false;
 
 updateHealth();
-
 updateProgress();
 
-
-/*
-Force focus after the new signal
-has been rendered.
-
-This is especially useful on mobile.
-*/
-
 setTimeout(() => {
-
-const activeInput =
-document.getElementById(
-    "answerInput"
-);
-
-
-if(
-activeInput &&
-document.getElementById(
-    "gameScreen"
-).classList.contains("active")
-) {
-
-    activeInput.disabled = false;
-
-    activeInput.readOnly = false;
-
-    activeInput.focus();
-
-}
-
-},150);
+    const activeInput = document.getElementById("answerInput");
+    if(activeInput && document.getElementById("gameScreen").classList.contains("active")) {
+        activeInput.disabled = false;
+        activeInput.readOnly = false;
+        activeInput.focus();
+    }
+}, 150);
 
 }
 
@@ -2043,21 +1595,11 @@ function updateHealth() {
 
 let output = "";
 
-
-for(let i = 0; i < 3; i++) {
-
-output +=
-i < health
-? "❤️ "
-: "🖤 ";
-
+for(let i = 0; i < maxHealth; i++) {
+    output += (i < health) ? "❤️ " : "🖤 ";
 }
 
-
-document.getElementById(
-    "healthDisplay"
-).textContent =
-output.trim();
+document.getElementById("healthDisplay").textContent = output.trim();
 
 }
 
@@ -2069,32 +1611,12 @@ PROGRESS
 function updateProgress() {
 
 if(!currentSignals.length) {
-
-document.getElementById(
-    "progressFill"
-).style.width =
-"0%";
-
-return;
-
+    document.getElementById("progressFill").style.width = "0%";
+    return;
 }
 
-
-/*
-Show progress based on the current signal.
-*/
-
-const percentage =
-(
-currentIndex /
-currentSignals.length
-) * 100;
-
-
-document.getElementById(
-    "progressFill"
-).style.width =
-`${percentage}%`;
+const percentage = (currentIndex / currentSignals.length) * 100;
+document.getElementById("progressFill").style.width = `${percentage}%`;
 
 }
 
@@ -2103,82 +1625,29 @@ document.getElementById(
 PLAY SOUND
 ===================================================== */
 
-document
-.getElementById("playSoundButton")
-.addEventListener(
-    "click",
-    playCurrentSound
-);
-
+document.getElementById("playSoundButton").addEventListener("click", playCurrentSound);
 
 async function playCurrentSound() {
 
-if(!currentSignal) {
-
+if(!currentSignal || answerLocked) {
     return;
-
 }
 
-
-/*
-Don't play while the signal is locked.
-*/
-
-if(answerLocked) {
-
-    return;
-
-}
-
-
-const audio =
-document.getElementById(
-    "audioPlayer"
-);
-
-
+const audio = document.getElementById("audioPlayer");
 audio.pause();
-
 audio.currentTime = 0;
-
-audio.src =
-currentSignal.audio_url;
-
+audio.src = currentSignal.audio_url;
 
 try {
-
-await audio.play();
-
-
-document.getElementById(
-    "soundStatus"
-).textContent =
-"Playing signal...";
-
-
-audio.onended = () => {
-
-document.getElementById(
-    "soundStatus"
-).textContent =
-"Signal finished.";
-
-};
-
+    await audio.play();
+    document.getElementById("soundStatus").textContent = "Playing signal...";
+    audio.onended = () => {
+        document.getElementById("soundStatus").textContent = "Signal finished.";
+    };
 }
 catch(error) {
-
-console.error(
-    "AUDIO ERROR:",
-    error
-);
-
-
-document.getElementById(
-    "soundStatus"
-).textContent =
-"Could not play this audio.";
-
+    console.error("AUDIO ERROR:", error);
+    document.getElementById("soundStatus").textContent = "Could not play this audio.";
 }
 
 }
@@ -2188,30 +1657,14 @@ document.getElementById(
 ANSWER INPUT
 ===================================================== */
 
-document
-.getElementById("submitAnswer")
-.addEventListener(
-    "click",
-    submitAnswer
-);
+document.getElementById("submitAnswer").addEventListener("click", submitAnswer);
 
-
-document
-.getElementById("answerInput")
-.addEventListener(
-    "keydown",
-    event => {
-
-        if(event.key === "Enter") {
-
-            event.preventDefault();
-
-            submitAnswer();
-
-        }
-
+document.getElementById("answerInput").addEventListener("keydown", event => {
+    if(event.key === "Enter") {
+        event.preventDefault();
+        submitAnswer();
     }
-);
+});
 
 
 function normalizeAnswer(value) {
@@ -2230,79 +1683,25 @@ SUBMIT ANSWER
 
 function submitAnswer() {
 
-if(!currentSignal) {
-
+if(!currentSignal || answerLocked) {
     return;
-
 }
 
-
-/*
-IMPORTANT:
-
-We DO NOT check whether the submit button
-is disabled.
-
-answerLocked is the actual game state.
-*/
-
-if(answerLocked) {
-
-    return;
-
-}
-
-
-const inputElement =
-document.getElementById(
-    "answerInput"
-);
-
-
-const answer =
-normalizeAnswer(
-    inputElement.value
-);
-
+const inputElement = document.getElementById("answerInput");
+const answer = normalizeAnswer(inputElement.value);
 
 if(!answer) {
-
-showFeedback(
-    "Type an answer first.",
-    "wrong"
-);
-
-
-inputElement.focus();
-
-return;
-
+    showFeedback("Type an answer first.", "wrong");
+    inputElement.focus();
+    return;
 }
 
-
-/*
-Accepted formats:
-
-Tiger
-
-Tiger, Bengal Tiger
-
-Tiger / Bengal Tiger
-
-Tiger | Bengal Tiger
-*/
-
-const acceptedAnswers =
-String(
-    currentSignal.animal_name
-)
+const acceptedAnswers = String(currentSignal.animal_name)
 .split(/[,/|]/)
 .map(normalizeAnswer)
 .filter(Boolean);
 
-
-const correct =
-acceptedAnswers.includes(answer);
+const correct = acceptedAnswers.includes(answer);
 
 
 /* =====================================================
@@ -2311,59 +1710,35 @@ CORRECT
 
 if(correct) {
 
-const points =
-getPointsForDifficulty(
-    currentDifficulty
-);
-
-
+const points = getPointsForDifficulty(currentDifficulty);
 score += points;
+document.getElementById("scoreDisplay").textContent = score;
 
-
-document.getElementById(
-    "scoreDisplay"
-).textContent =
-score;
-
+/*
+Gain 1 heart back on correct answer (up to tier max)
+*/
+let healed = false;
+if(health < maxHealth) {
+    health++;
+    updateHealth();
+    healed = true;
+}
 
 showFeedback(
-    `✓ CORRECT! +${points} POINT${points === 1 ? "" : "S"}`,
+    `✓ CORRECT! +${points} POINT${points === 1 ? "" : "S"}${healed ? " • ❤️ +1 Heart Restored!" : ""}`,
     "correct"
 );
 
-
-/*
-Lock the signal.
-
-The input itself remains usable,
-but submitting is blocked.
-*/
-
 answerLocked = true;
-
-
-document.getElementById(
-    "submitAnswer"
-).disabled = true;
-
-
-document.getElementById(
-    "playSoundButton"
-).disabled = true;
-
+document.getElementById("submitAnswer").disabled = true;
+document.getElementById("playSoundButton").disabled = true;
 
 clearSignalTimer();
 
-
-signalTimer =
-setTimeout(() => {
-
+signalTimer = setTimeout(() => {
     signalTimer = null;
-
     completeSignal();
-
-},700);
-
+}, 900);
 
 return;
 
@@ -2375,75 +1750,62 @@ WRONG
 ===================================================== */
 
 health--;
-
 updateHealth();
 
-
 if(health > 0) {
+    showFeedback(`Wrong. ${health} ${health === 1 ? "heart" : "hearts"} left.`, "wrong");
+    inputElement.focus();
+    inputElement.select();
+    return;
+}
+
+
+/* =====================================================
+ZERO HEALTH (GAME OVER -> LEADERBOARD)
+===================================================== */
+
+const correctAnswer = String(currentSignal.animal_name).split(/[,/|]/)[0].trim();
 
 showFeedback(
-    `Wrong. ${health} ${health === 1 ? "try" : "tries"} left.`,
-    "wrong"
+    `❌ OUT OF HEARTS! Game Over — Answer: ${correctAnswer}`,
+    "reveal"
 );
 
+document.getElementById("soundStatus").textContent = "Lost all hearts. Heading to leaderboard...";
+answerLocked = true;
 
-inputElement.focus();
+document.getElementById("submitAnswer").disabled = true;
+document.getElementById("playSoundButton").disabled = true;
 
-inputElement.select();
+clearSignalTimer();
 
-return;
+/*
+Player lost all hearts -> go to leaderboard instead of next level
+*/
+signalTimer = setTimeout(async () => {
+    signalTimer = null;
+    await handleGameOver();
+}, 2200);
 
 }
 
 
 /* =====================================================
-ZERO HEALTH
+HANDLE GAME OVER (OUT OF HEARTS)
 ===================================================== */
 
-const correctAnswer =
-String(
-    currentSignal.animal_name
-)
-.split(/[,/|]/)[0]
-.trim();
-
-
-showFeedback(
-    `❌ OUT OF HEALTH — Answer: ${correctAnswer}`,
-    "reveal"
-);
-
-
-document.getElementById(
-    "soundStatus"
-).textContent =
-"Signal completed without points.";
-
-
-answerLocked = true;
-
-
-document.getElementById(
-    "submitAnswer"
-).disabled = true;
-
-
-document.getElementById(
-    "playSoundButton"
-).disabled = true;
-
+async function handleGameOver() {
 
 clearSignalTimer();
+answerLocked = true;
 
+const audio = document.getElementById("audioPlayer");
+audio.pause();
 
-signalTimer =
-setTimeout(() => {
+await saveFinalScore();
 
-    signalTimer = null;
-
-    completeSignal();
-
-},2200);
+showScreen("leaderboardScreen");
+await loadLeaderboard();
 
 }
 
@@ -2452,20 +1814,11 @@ setTimeout(() => {
 FEEDBACK
 ===================================================== */
 
-function showFeedback(text,type) {
+function showFeedback(text, type) {
 
-const feedback =
-document.getElementById(
-    "feedback"
-);
-
-
-feedback.textContent =
-text;
-
-
-feedback.className =
-`feedback ${type}`;
+const feedback = document.getElementById("feedback");
+feedback.textContent = text;
+feedback.className = `feedback ${type}`;
 
 }
 
@@ -2477,57 +1830,36 @@ COMPLETE SIGNAL
 function completeSignal() {
 
 clearSignalTimer();
-
-
 currentIndex++;
 
-
-if(
-currentIndex <
-currentSignals.length
-) {
-
+if(currentIndex < currentSignals.length) {
     loadCurrentSignal();
-
     return;
-
 }
 
-
 /*
-The entire current tier is complete.
+Tier complete transitions
 */
-
 if(currentDifficulty === "easy") {
-
     showTransition(
         "MEDIUM",
         "Easy Complete",
-        "You've cleared Easy. Signals are now worth 2 points."
+        "You've cleared Easy! Next tier grants 4 hearts. Signals are worth 2 points."
     );
-
     return;
-
 }
 
-
 if(currentDifficulty === "medium") {
-
     showTransition(
         "HARD",
         "Medium Complete",
-        "You've made it to the final tier. Signals are now worth 3 points."
+        "You've made it to the final tier! Next tier grants 5 hearts. Signals are worth 3 points."
     );
-
     return;
-
 }
 
-
 if(currentDifficulty === "hard") {
-
     finishGame();
-
 }
 
 }
@@ -2539,85 +1871,29 @@ TRANSITION
 
 let nextDifficulty = null;
 
+function showTransition(next, title, text) {
 
-function showTransition(
-    next,
-    title,
-    text
-) {
-
-nextDifficulty =
-next.toLowerCase();
-
-
+nextDifficulty = next.toLowerCase();
 answerLocked = true;
 
+document.getElementById("transitionTitle").textContent = title;
+document.getElementById("transitionText").textContent = text;
+document.getElementById("transitionEmoji").textContent = next === "MEDIUM" ? "Ⅱ" : "Ⅲ";
+document.getElementById("continueButton").textContent = `ENTER ${next} →`;
 
-document.getElementById(
-    "transitionTitle"
-).textContent =
-title;
-
-
-document.getElementById(
-    "transitionText"
-).textContent =
-text;
-
-
-document.getElementById(
-    "transitionEmoji"
-).textContent =
-next === "MEDIUM"
-? "Ⅱ"
-: "Ⅲ";
-
-
-document.getElementById(
-    "continueButton"
-).textContent =
-`ENTER ${next} →`;
-
-
-showScreen(
-    "transitionScreen"
-);
+showScreen("transitionScreen");
 
 }
 
 
-/*
-Continue button.
-
-Set nextDifficulty to null BEFORE
-loading the next tier so a double tap
-can't create two requests.
-*/
-
-document
-.getElementById("continueButton")
-.addEventListener(
-    "click",
-    () => {
-
-        if(!nextDifficulty) {
-
-            return;
-
-        }
-
-
-        const next =
-        nextDifficulty;
-
-
-        nextDifficulty = null;
-
-
-        startDifficulty(next);
-
+document.getElementById("continueButton").addEventListener("click", () => {
+    if(!nextDifficulty) {
+        return;
     }
-);
+    const next = nextDifficulty;
+    nextDifficulty = null;
+    startDifficulty(next);
+});
 
 
 /* =====================================================
@@ -2627,78 +1903,43 @@ SAVE FINAL SCORE
 async function saveFinalScore() {
 
 if(gameSaved) {
-
     return;
-
 }
-
 
 gameSaved = true;
 
-
 try {
+    const { error } = await supabase
+    .from("leaderboard")
+    .insert({
+        player_name: playerName,
+        score: score
+    });
 
-const {
-    error
-} =
-await supabase
-.from("leaderboard")
-.insert({
-    player_name:playerName,
-    score:score
-});
-
-
-if(error) {
-
-console.error(
-    "LEADERBOARD SAVE ERROR:",
-    error
-);
-
-}
-
+    if(error) {
+        console.error("LEADERBOARD SAVE ERROR:", error);
+    }
 }
 catch(error) {
-
-console.error(
-    "COULD NOT SAVE SCORE:",
-    error
-);
-
+    console.error("COULD NOT SAVE SCORE:", error);
 }
 
 }
 
 
 /* =====================================================
-GAME FINISH
+GAME FINISH (WON ALL TIERS)
 ===================================================== */
 
 async function finishGame() {
 
 clearSignalTimer();
-
 answerLocked = true;
 
+document.getElementById("finalScore").textContent = score;
+document.getElementById("finalPlayer").textContent = playerName;
 
-document.getElementById(
-    "finalScore"
-).textContent =
-score;
-
-
-document.getElementById(
-    "finalPlayer"
-).textContent =
-playerName;
-
-
-showScreen(
-    "completionScreen"
-);
-
-
+showScreen("completionScreen");
 await saveFinalScore();
 
 }
@@ -2710,202 +1951,75 @@ LEADERBOARD
 
 async function loadLeaderboard() {
 
-const list =
-document.getElementById(
-    "leaderboardList"
-);
+const list = document.getElementById("leaderboardList");
+list.innerHTML = `<div class="loading">Loading leaderboard...</div>`;
 
-
-list.innerHTML =
-`<div class="loading">
-Loading leaderboard...
-</div>`;
-
-
-const {
-    data,
-    error
-} =
-await supabase
+const { data, error } = await supabase
 .from("leaderboard")
 .select("*")
-.order(
-    "score",
-    {
-        ascending:false
-    }
-)
-.order(
-    "completed_at",
-    {
-        ascending:true
-    }
-);
-
+.order("score", { ascending:false })
+.order("completed_at", { ascending:true });
 
 if(error) {
+    console.error("LEADERBOARD LOAD ERROR:", error);
+    list.innerHTML =
+    `<div class="empty">
+    Could not load leaderboard.<br><br>
+    ${escapeHTML(error.message || "")}
+    </div>`;
+    return;
+}
 
-console.error(
-    "LEADERBOARD LOAD ERROR:",
-    error
-);
-
-
-list.innerHTML =
-`<div class="empty">
-Could not load leaderboard.<br><br>
-${escapeHTML(error.message || "")}
-</div>`;
-
-
-return;
+renderLeaderboard(data || []);
 
 }
 
-
-renderLeaderboard(
-    data || []
-);
-
-}
-
-
-/* =====================================================
-RENDER LEADERBOARD
-===================================================== */
 
 function renderLeaderboard(entries) {
 
-const list =
-document.getElementById(
-    "leaderboardList"
-);
-
+const list = document.getElementById("leaderboardList");
 
 if(!entries.length) {
-
-list.innerHTML =
-`<div class="empty">
-No hunters yet.<br>
-Be the first to complete the hunt!
-</div>`;
-
-
-return;
-
+    list.innerHTML =
+    `<div class="empty">
+    No hunters yet.<br>
+    Be the first to complete the hunt!
+    </div>`;
+    return;
 }
 
+list.innerHTML = entries.map((entry, index) => {
+    const rank = index + 1;
+    const medal = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : rank;
+    const rowClass = rank === 1 ? "top-one" : rank === 2 ? "top-two" : rank === 3 ? "top-three" : "";
 
-list.innerHTML =
-entries
-.map(
-(entry,index) => {
-
-const rank =
-index + 1;
-
-
-const medal =
-rank === 1
-? "🥇"
-: rank === 2
-? "🥈"
-: rank === 3
-? "🥉"
-: rank;
-
-
-const rowClass =
-rank === 1
-? "top-one"
-: rank === 2
-? "top-two"
-: rank === 3
-? "top-three"
-: "";
-
-
-let date = "";
-
-
-if(entry.completed_at) {
-
-date =
-new Date(
-    entry.completed_at
-)
-.toLocaleDateString(
-    undefined,
-    {
-        day:"2-digit",
-        month:"short"
+    let date = "";
+    if(entry.completed_at) {
+        date = new Date(entry.completed_at).toLocaleDateString(undefined, {
+            day: "2-digit",
+            month: "short"
+        });
     }
-);
+
+    return `
+    <div class="leader-row ${rowClass}">
+        <div class="leader-rank">${medal}</div>
+        <div class="leader-name">${escapeHTML(entry.player_name)}</div>
+        <div class="leader-score">${Number(entry.score) || 0} pts</div>
+        <div class="leader-date">${date}</div>
+    </div>
+    `;
+}).join("");
 
 }
 
 
-return `
+document.getElementById("viewLeaderboardButton").addEventListener("click", async () => {
+    showScreen("leaderboardScreen");
+    await loadLeaderboard();
+});
 
-<div class="leader-row ${rowClass}">
-
-<div class="leader-rank">
-${medal}
-</div>
-
-<div class="leader-name">
-${escapeHTML(entry.player_name)}
-</div>
-
-<div class="leader-score">
-${Number(entry.score) || 0} pts
-</div>
-
-<div class="leader-date">
-${date}
-</div>
-
-</div>
-
-`;
-
-}
-)
-.join("");
-
-}
-
-
-/* =====================================================
-LEADERBOARD BUTTONS
-===================================================== */
-
-document
-.getElementById(
-    "viewLeaderboardButton"
-)
-.addEventListener(
-    "click",
-    async () => {
-
-        showScreen(
-            "leaderboardScreen"
-        );
-
-        await loadLeaderboard();
-
-    }
-);
-
-
-document
-.getElementById(
-    "refreshLeaderboard"
-)
-.addEventListener(
-    "click",
-    loadLeaderboard
-);
+document.getElementById("refreshLeaderboard").addEventListener("click", loadLeaderboard);
 
 
 /* =====================================================
@@ -2915,453 +2029,171 @@ RESET GAME
 function resetToNameScreen() {
 
 clearSignalTimer();
-
-
 ++difficultyRequestId;
 
-
 playerName = "";
-
 score = 0;
-
 currentDifficulty = "easy";
-
 currentSignals = [];
-
 currentIndex = 0;
 
-health = 3;
+maxHealth = getMaxHealthForDifficulty("easy");
+health = maxHealth;
 
 currentSignal = null;
-
 gameSaved = false;
-
 nextDifficulty = null;
-
 answerLocked = false;
 
-
-const audio =
-document.getElementById(
-    "audioPlayer"
-);
-
-
+const audio = document.getElementById("audioPlayer");
 audio.pause();
-
 audio.currentTime = 0;
-
 audio.src = "";
 
-
-document.getElementById(
-    "playerName"
-).value = "";
-
-
-document.getElementById(
-    "nameMessage"
-).textContent = "";
-
+document.getElementById("playerName").value = "";
+document.getElementById("nameMessage").textContent = "";
 
 resetGameControls();
-
-
-showScreen(
-    "nameScreen"
-);
+showScreen("nameScreen");
 
 }
 
-
-document
-.getElementById(
-    "leaderboardPlayAgain"
-)
-.addEventListener(
-    "click",
-    resetToNameScreen
-);
-
-
-document
-.getElementById(
-    "restartButton"
-)
-.addEventListener(
-    "click",
-    resetToNameScreen
-);
+document.getElementById("leaderboardPlayAgain").addEventListener("click", resetToNameScreen);
+document.getElementById("restartButton").addEventListener("click", resetToNameScreen);
 
 
 /* =====================================================
 ADMIN LOGIN
 ===================================================== */
 
-document
-.getElementById(
-    "adminLoginButton"
-)
-.addEventListener(
-    "click",
-    adminLogin
-);
+document.getElementById("adminLoginButton").addEventListener("click", adminLogin);
 
-
-document
-.getElementById(
-    "adminPassword"
-)
-.addEventListener(
-    "keydown",
-    event => {
-
-        if(event.key === "Enter") {
-
-            event.preventDefault();
-
-            adminLogin();
-
-        }
-
+document.getElementById("adminPassword").addEventListener("keydown", event => {
+    if(event.key === "Enter") {
+        event.preventDefault();
+        adminLogin();
     }
-);
-
+});
 
 function adminLogin() {
 
-const password =
-document.getElementById(
-    "adminPassword"
-).value;
-
+const password = document.getElementById("adminPassword").value;
 
 if(password === "s1zoo") {
+    isAdmin = true;
+    document.getElementById("adminLoginMessage").textContent = "";
+    showScreen("adminScreen");
+    loadAdminLibrary();
+    loadAdminLeaderboard();
+    return;
+}
 
-isAdmin = true;
-
-
-document.getElementById(
-    "adminLoginMessage"
-).textContent =
-"";
-
-
-showScreen(
-    "adminScreen"
-);
-
-
-loadAdminLibrary();
-
-loadAdminLeaderboard();
-
-
-return;
+document.getElementById("adminLoginMessage").textContent = "Incorrect password.";
 
 }
 
 
-document.getElementById(
-    "adminLoginMessage"
-).textContent =
-"Incorrect password.";
-
-}
-
-
-/* =====================================================
-BACK
-===================================================== */
-
-document
-.getElementById(
-    "backToPlayerButton"
-)
-.addEventListener(
-    "click",
-    () => {
-
-        document.getElementById(
-            "adminPassword"
-        ).value = "";
-
-
-        document.getElementById(
-            "adminLoginMessage"
-        ).textContent = "";
-
-
-        showScreen(
-            "nameScreen"
-        );
-
-    }
-);
+document.getElementById("backToPlayerButton").addEventListener("click", () => {
+    document.getElementById("adminPassword").value = "";
+    document.getElementById("adminLoginMessage").textContent = "";
+    showScreen("nameScreen");
+});
 
 
 /* =====================================================
 ADMIN UPLOAD
 ===================================================== */
 
-document
-.getElementById(
-    "audioFile"
-)
-.addEventListener(
-    "change",
-    () => {
+document.getElementById("audioFile").addEventListener("change", () => {
+    const file = document.getElementById("audioFile").files[0];
+    document.getElementById("selectedFileName").textContent = file ? file.name : "";
+});
 
-        const file =
-        document.getElementById(
-            "audioFile"
-        ).files[0];
-
-
-        document.getElementById(
-            "selectedFileName"
-        ).textContent =
-        file
-        ? file.name
-        : "";
-
-    }
-);
-
-
-document
-.getElementById(
-    "uploadButton"
-)
-.addEventListener(
-    "click",
-    uploadSignal
-);
-
+document.getElementById("uploadButton").addEventListener("click", uploadSignal);
 
 async function uploadSignal() {
 
-if(!isAdmin) {
+if(!isAdmin) return;
 
-    return;
-
-}
-
-
-const animalName =
-document.getElementById(
-    "animalName"
-).value.trim();
-
-
-const difficulty =
-document.getElementById(
-    "difficulty"
-).value;
-
-
-const file =
-document.getElementById(
-    "audioFile"
-).files[0];
-
+const animalName = document.getElementById("animalName").value.trim();
+const difficulty = document.getElementById("difficulty").value;
+const file = document.getElementById("audioFile").files[0];
 
 if(!animalName) {
-
-alert(
-    "Enter the animal/wildlife name."
-);
-
-return;
-
+    alert("Enter the animal/wildlife name.");
+    return;
 }
-
-
 if(!file) {
-
-alert(
-    "Choose an audio file."
-);
-
-return;
-
+    alert("Choose an audio file.");
+    return;
+}
+if(file.size > 50 * 1024 * 1024) {
+    alert("Audio file must be smaller than 50 MB.");
+    return;
 }
 
+const uploadButton = document.getElementById("uploadButton");
+const progress = document.getElementById("uploadProgress");
 
-if(
-file.size >
-50 * 1024 * 1024
-) {
-
-alert(
-    "Audio file must be smaller than 50 MB."
-);
-
-return;
-
-}
-
-
-const uploadButton =
-document.getElementById(
-    "uploadButton"
-);
-
-
-const progress =
-document.getElementById(
-    "uploadProgress"
-);
-
-
-uploadButton.disabled =
-true;
-
-
-progress.textContent =
-"Uploading audio...";
-
+uploadButton.disabled = true;
+progress.textContent = "Uploading audio...";
 
 try {
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const uniquePath = `${difficulty}/${Date.now()}_${crypto.randomUUID()}_${safeName}`;
 
-const safeName =
-file.name.replace(
-    /[^a-zA-Z0-9._-]/g,
-    "_"
-);
-
-
-const uniquePath =
-`${difficulty}/${Date.now()}_${crypto.randomUUID()}_${safeName}`;
-
-
-const {
-    error:uploadError
-} =
-await supabase
-.storage
-.from("wildlife-audio")
-.upload(
-    uniquePath,
-    file,
-    {
+    const { error:uploadError } = await supabase
+    .storage
+    .from("wildlife-audio")
+    .upload(uniquePath, file, {
         cacheControl:"3600",
         upsert:false,
-        contentType:
-            file.type ||
-            "audio/mpeg"
+        contentType: file.type || "audio/mpeg"
+    });
+
+    if(uploadError) throw uploadError;
+
+    progress.textContent = "Audio uploaded. Saving signal...";
+
+    const { data:publicData } = supabase
+    .storage
+    .from("wildlife-audio")
+    .getPublicUrl(uniquePath);
+
+    const audioUrl = publicData.publicUrl;
+
+    const { error:databaseError } = await supabase
+    .from("signals")
+    .insert({
+        animal_name: animalName,
+        difficulty: difficulty,
+        audio_url: audioUrl,
+        audio_path: uniquePath
+    });
+
+    if(databaseError) {
+        await supabase.storage.from("wildlife-audio").remove([uniquePath]);
+        throw databaseError;
     }
-);
 
+    progress.textContent = "✓ Signal added successfully!";
+    document.getElementById("animalName").value = "";
+    document.getElementById("audioFile").value = "";
+    document.getElementById("selectedFileName").textContent = "";
 
-if(uploadError) {
+    await loadAdminLibrary();
 
-    throw uploadError;
-
-}
-
-
-progress.textContent =
-"Audio uploaded. Saving signal...";
-
-
-const {
-    data:publicData
-} =
-supabase
-.storage
-.from("wildlife-audio")
-.getPublicUrl(
-    uniquePath
-);
-
-
-const audioUrl =
-publicData.publicUrl;
-
-
-const {
-    error:databaseError
-} =
-await supabase
-.from("signals")
-.insert({
-    animal_name:animalName,
-    difficulty:difficulty,
-    audio_url:audioUrl,
-    audio_path:uniquePath
-});
-
-
-if(databaseError) {
-
-await supabase
-.storage
-.from("wildlife-audio")
-.remove([
-    uniquePath
-]);
-
-
-throw databaseError;
-
-}
-
-
-progress.textContent =
-"✓ Signal added successfully!";
-
-
-document.getElementById(
-    "animalName"
-).value = "";
-
-
-document.getElementById(
-    "audioFile"
-).value = "";
-
-
-document.getElementById(
-    "selectedFileName"
-).textContent = "";
-
-
-await loadAdminLibrary();
-
-
-setTimeout(() => {
-
-progress.textContent = "";
-
-},3000);
-
+    setTimeout(() => {
+        progress.textContent = "";
+    }, 3000);
 }
 catch(error) {
-
-console.error(
-    "UPLOAD ERROR:",
-    error
-);
-
-
-progress.textContent = "";
-
-
-alert(
-    "Upload failed:\n\n" +
-    (
-        error.message ||
-        "Unknown error"
-    )
-);
-
+    console.error("UPLOAD ERROR:", error);
+    progress.textContent = "";
+    alert("Upload failed:\n\n" + (error.message || "Unknown error"));
 }
 finally {
-
-uploadButton.disabled =
-false;
-
+    uploadButton.disabled = false;
 }
 
 }
@@ -3373,378 +2205,125 @@ ADMIN LIBRARY
 
 async function loadAdminLibrary() {
 
-const list =
-document.getElementById(
-    "signalList"
-);
+const list = document.getElementById("signalList");
+list.innerHTML = `<div class="loading">Loading library...</div>`;
 
-
-list.innerHTML =
-`<div class="loading">
-Loading library...
-</div>`;
-
-
-const {
-    data,
-    error
-} =
-await supabase
+const { data, error } = await supabase
 .from("signals")
 .select("*")
-.order(
-    "created_at",
-    {
-        ascending:false
-    }
-);
-
+.order("created_at", { ascending:false });
 
 if(error) {
+    console.error("ADMIN LIBRARY ERROR:", error);
+    list.innerHTML = `<div class="empty">Could not load signals.<br><br>${escapeHTML(error.message || "")}</div>`;
+    return;
+}
 
-console.error(
-    "ADMIN LIBRARY ERROR:",
-    error
-);
-
-
-list.innerHTML =
-`<div class="empty">
-Could not load signals.<br><br>
-${escapeHTML(error.message || "")}
-</div>`;
-
-
-return;
+updateStats(data || []);
+renderSignalList(data || []);
 
 }
 
-
-updateStats(
-    data || []
-);
-
-
-renderSignalList(
-    data || []
-);
-
-}
-
-
-/* =====================================================
-STATS
-===================================================== */
 
 function updateStats(signals) {
 
-const easy =
-signals.filter(
-    s => s.difficulty === "easy"
-).length;
+const easy = signals.filter(s => s.difficulty === "easy").length;
+const medium = signals.filter(s => s.difficulty === "medium").length;
+const hard = signals.filter(s => s.difficulty === "hard").length;
 
-
-const medium =
-signals.filter(
-    s => s.difficulty === "medium"
-).length;
-
-
-const hard =
-signals.filter(
-    s => s.difficulty === "hard"
-).length;
-
-
-document.getElementById(
-    "totalCount"
-).textContent =
-signals.length;
-
-
-document.getElementById(
-    "easyCount"
-).textContent =
-easy;
-
-
-document.getElementById(
-    "mediumCount"
-).textContent =
-medium;
-
-
-document.getElementById(
-    "hardCount"
-).textContent =
-hard;
+document.getElementById("totalCount").textContent = signals.length;
+document.getElementById("easyCount").textContent = easy;
+document.getElementById("mediumCount").textContent = medium;
+document.getElementById("hardCount").textContent = hard;
 
 }
 
-
-/* =====================================================
-RENDER LIBRARY
-===================================================== */
 
 function renderSignalList(signals) {
 
-const list =
-document.getElementById(
-    "signalList"
-);
-
+const list = document.getElementById("signalList");
 
 if(!signals.length) {
-
-list.innerHTML =
-`<div class="empty">
-No signals yet.<br>
-Add your first wildlife sound.
-</div>`;
-
-
-return;
-
+    list.innerHTML = `<div class="empty">No signals yet.<br>Add your first wildlife sound.</div>`;
+    return;
 }
 
-
-list.innerHTML =
-signals
-.map(
-signal => `
-
+list.innerHTML = signals.map(signal => `
 <div class="signal-item">
-
-<div class="signal-info">
-
-<div class="signal-name">
-${escapeHTML(signal.animal_name)}
+    <div class="signal-info">
+        <div class="signal-name">${escapeHTML(signal.animal_name)}</div>
+        <div class="signal-difficulty">${escapeHTML(signal.difficulty)}</div>
+    </div>
+    <div class="signal-actions">
+        <button class="play-small" data-play="${escapeHTML(signal.audio_url)}">▶</button>
+        <button class="danger" data-delete="${signal.id}">🗑</button>
+    </div>
 </div>
+`).join("");
 
-<div class="signal-difficulty">
-${escapeHTML(signal.difficulty)}
-</div>
+list.querySelectorAll("[data-play]").forEach(button => {
+    button.addEventListener("click", () => {
+        playAdminPreview(button.dataset.play);
+    });
+});
 
-</div>
-
-<div class="signal-actions">
-
-<button
-class="play-small"
-data-play="${escapeHTML(signal.audio_url)}"
->
-▶
-</button>
-
-<button
-class="danger"
-data-delete="${signal.id}"
->
-🗑
-</button>
-
-</div>
-
-</div>
-
-`
-)
-.join("");
-
-
-list
-.querySelectorAll(
-    "[data-play]"
-)
-.forEach(
-    button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                playAdminPreview(
-                    button.dataset.play
-                );
-
-            }
-        );
-
-    }
-);
-
-
-list
-.querySelectorAll(
-    "[data-delete]"
-)
-.forEach(
-    button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                deleteSignal(
-                    button.dataset.delete
-                );
-
-            }
-        );
-
-    }
-);
+list.querySelectorAll("[data-delete]").forEach(button => {
+    button.addEventListener("click", () => {
+        deleteSignal(button.dataset.delete);
+    });
+});
 
 }
 
-
-/* =====================================================
-ADMIN PREVIEW
-===================================================== */
 
 function playAdminPreview(url) {
 
-const audio =
-document.getElementById(
-    "audioPlayer"
-);
-
-
+const audio = document.getElementById("audioPlayer");
 audio.pause();
-
 audio.currentTime = 0;
-
 audio.src = url;
-
-
-audio
-.play()
-.catch(
-    error => {
-
-        console.error(
-            "AUDIO PREVIEW ERROR:",
-            error
-        );
-
-    }
-);
+audio.play().catch(error => console.error("AUDIO PREVIEW ERROR:", error));
 
 }
 
-
-/* =====================================================
-DELETE SIGNAL
-===================================================== */
 
 async function deleteSignal(id) {
 
-if(!isAdmin) {
+if(!isAdmin) return;
 
-    return;
-
-}
-
-
-const confirmed =
-confirm(
-    "Delete this signal?\n\nThis will remove the database record and its audio file."
-);
-
-
-if(!confirmed) {
-
-    return;
-
-}
-
+const confirmed = confirm("Delete this signal?\n\nThis will remove the database record and its audio file.");
+if(!confirmed) return;
 
 try {
+    const { data:signal, error:fetchError } = await supabase
+    .from("signals")
+    .select("audio_path")
+    .eq("id", id)
+    .single();
 
-const {
-    data:signal,
-    error:fetchError
-} =
-await supabase
-.from("signals")
-.select("audio_path")
-.eq(
-    "id",
-    id
-)
-.single();
+    if(fetchError) throw fetchError;
 
+    if(signal.audio_path) {
+        const { error:storageError } = await supabase
+        .storage
+        .from("wildlife-audio")
+        .remove([signal.audio_path]);
 
-if(fetchError) {
+        if(storageError) console.warn("Storage delete warning:", storageError);
+    }
 
-    throw fetchError;
+    const { error:databaseError } = await supabase
+    .from("signals")
+    .delete()
+    .eq("id", id);
 
-}
+    if(databaseError) throw databaseError;
 
-
-if(signal.audio_path) {
-
-const {
-    error:storageError
-} =
-await supabase
-.storage
-.from("wildlife-audio")
-.remove([
-    signal.audio_path
-]);
-
-
-if(storageError) {
-
-    console.warn(
-        "Storage delete warning:",
-        storageError
-    );
-
-}
-
-}
-
-
-const {
-    error:databaseError
-} =
-await supabase
-.from("signals")
-.delete()
-.eq(
-    "id",
-    id
-);
-
-
-if(databaseError) {
-
-    throw databaseError;
-
-}
-
-
-await loadAdminLibrary();
-
+    await loadAdminLibrary();
 }
 catch(error) {
-
-console.error(
-    "DELETE ERROR:",
-    error
-);
-
-
-alert(
-    "Could not delete signal:\n\n" +
-    (
-        error.message ||
-        "Unknown error"
-    )
-);
-
+    console.error("DELETE ERROR:", error);
+    alert("Could not delete signal:\n\n" + (error.message || "Unknown error"));
 }
 
 }
@@ -3756,295 +2335,94 @@ ADMIN LEADERBOARD
 
 async function loadAdminLeaderboard() {
 
-const list =
-document.getElementById(
-    "adminLeaderboardList"
-);
+const list = document.getElementById("adminLeaderboardList");
+list.innerHTML = `<div class="loading">Loading leaderboard...</div>`;
 
-
-list.innerHTML =
-`<div class="loading">
-Loading leaderboard...
-</div>`;
-
-
-const {
-    data,
-    error
-} =
-await supabase
+const { data, error } = await supabase
 .from("leaderboard")
 .select("*")
-.order(
-    "score",
-    {
-        ascending:false
-    }
-)
-.order(
-    "completed_at",
-    {
-        ascending:true
-    }
-);
-
+.order("score", { ascending:false })
+.order("completed_at", { ascending:true });
 
 if(error) {
+    console.error("ADMIN LEADERBOARD ERROR:", error);
+    list.innerHTML = `<div class="empty">Could not load leaderboard.<br><br>${escapeHTML(error.message || "")}</div>`;
+    return;
+}
 
-console.error(
-    "ADMIN LEADERBOARD ERROR:",
-    error
-);
-
-
-list.innerHTML =
-`<div class="empty">
-Could not load leaderboard.<br><br>
-${escapeHTML(error.message || "")}
-</div>`;
-
-
-return;
+renderAdminLeaderboard(data || []);
 
 }
 
-
-renderAdminLeaderboard(
-    data || []
-);
-
-}
-
-
-/* =====================================================
-RENDER ADMIN LEADERBOARD
-===================================================== */
 
 function renderAdminLeaderboard(entries) {
 
-const list =
-document.getElementById(
-    "adminLeaderboardList"
-);
-
+const list = document.getElementById("adminLeaderboardList");
 
 if(!entries.length) {
+    list.innerHTML = `<div class="empty">No players on the leaderboard yet.</div>`;
+    return;
+}
 
-list.innerHTML =
-`<div class="empty">
-No players on the leaderboard yet.
-</div>`;
+list.innerHTML = entries.map((entry, index) => {
+    const rank = index + 1;
+    return `
+    <div class="admin-leader-row">
+        <div>${rank}</div>
+        <div style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+            ${escapeHTML(entry.player_name)}
+        </div>
+        <div class="admin-leader-score">${Number(entry.score) || 0}</div>
+        <button class="danger" data-remove-player="${entry.id}">REMOVE</button>
+    </div>
+    `;
+}).join("");
 
-
-return;
+list.querySelectorAll("[data-remove-player]").forEach(button => {
+    button.addEventListener("click", () => {
+        removeLeaderboardEntry(button.dataset.removePlayer);
+    });
+});
 
 }
 
-
-list.innerHTML =
-entries
-.map(
-(entry,index) => {
-
-const rank =
-index + 1;
-
-
-return `
-
-<div class="admin-leader-row">
-
-<div>
-${rank}
-</div>
-
-<div
-style="
-min-width:0;
-overflow:hidden;
-text-overflow:ellipsis;
-white-space:nowrap;
-"
->
-${escapeHTML(entry.player_name)}
-</div>
-
-<div class="admin-leader-score">
-${Number(entry.score) || 0}
-</div>
-
-<button
-class="danger"
-data-remove-player="${entry.id}"
->
-REMOVE
-</button>
-
-</div>
-
-`;
-
-}
-)
-.join("");
-
-
-list
-.querySelectorAll(
-    "[data-remove-player]"
-)
-.forEach(
-    button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                removeLeaderboardEntry(
-                    button.dataset.removePlayer
-                );
-
-            }
-        );
-
-    }
-);
-
-}
-
-
-/* =====================================================
-REMOVE LEADERBOARD ENTRY
-===================================================== */
 
 async function removeLeaderboardEntry(id) {
 
-if(!isAdmin) {
+if(!isAdmin) return;
 
-    return;
-
-}
-
-
-const confirmed =
-confirm(
-    "Remove this player from the leaderboard?"
-);
-
-
-if(!confirmed) {
-
-    return;
-
-}
-
+const confirmed = confirm("Remove this player from the leaderboard?");
+if(!confirmed) return;
 
 try {
+    const { error } = await supabase
+    .from("leaderboard")
+    .delete()
+    .eq("id", id);
 
-const {
-    error
-} =
-await supabase
-.from("leaderboard")
-.delete()
-.eq(
-    "id",
-    id
-);
-
-
-if(error) {
-
-    throw error;
-
-}
-
-
-await loadAdminLeaderboard();
-
+    if(error) throw error;
+    await loadAdminLeaderboard();
 }
 catch(error) {
-
-console.error(
-    "REMOVE LEADERBOARD ERROR:",
-    error
-);
-
-
-alert(
-    "Could not remove player:\n\n" +
-    (
-        error.message ||
-        "Unknown error"
-    )
-);
-
+    console.error("REMOVE LEADERBOARD ERROR:", error);
+    alert("Could not remove player:\n\n" + (error.message || "Unknown error"));
 }
 
 }
 
 
-/* =====================================================
-REFRESH ADMIN
-===================================================== */
+document.getElementById("refreshLibrary").addEventListener("click", () => {
+    loadAdminLibrary();
+    loadAdminLeaderboard();
+});
 
-document
-.getElementById(
-    "refreshLibrary"
-)
-.addEventListener(
-    "click",
-    () => {
+document.getElementById("adminLogout").addEventListener("click", () => {
+    isAdmin = false;
+    document.getElementById("adminPassword").value = "";
+    showScreen("nameScreen");
+});
 
-        loadAdminLibrary();
-
-        loadAdminLeaderboard();
-
-    }
-);
-
-
-/* =====================================================
-LOGOUT
-===================================================== */
-
-document
-.getElementById(
-    "adminLogout"
-)
-.addEventListener(
-    "click",
-    () => {
-
-        isAdmin = false;
-
-        document.getElementById(
-            "adminPassword"
-        ).value = "";
-
-
-        showScreen(
-            "nameScreen"
-        );
-
-    }
-);
-
-
-/* =====================================================
-STARTUP
-===================================================== */
-
-console.log(
-    "Wildlife Signal Hunt loaded."
-);
-
-
-console.log(
-    "Supabase:",
-    SUPABASE_URL
-);
-
+console.log("Wildlife Signal Hunt loaded.");
 </script>
 
 </body>
